@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kontrak Latihan Murid 2027</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&family=Noto+Naskh+Arabic:wght@400;600&display=swap" rel="stylesheet">
+<style>
+/* Layout idea: sticky control bar over a dated weekly ledger, term blocks separated by holiday bands. */
+:root{
+  --bg:#f2f4f0; --surface:#ffffff; --ink:#14231f; --muted:#5b6b66; --line:#dbe1dc;
+  --accent:#0f5c4d; --accent-ink:#ffffff; --accent-soft:#dcece7;
+  --exam:#b4690e; --exam-soft:#fbecd3; --cuti:#8a96a3; --cuti-soft:#e9edf1; --open-soft:#e4ecf6; --open:#3a5f8f;
+  --ok:#1f7a3d;
+  --font-display:'Bricolage Grotesque','Segoe UI',system-ui,sans-serif;
+  --font-body:'IBM Plex Sans','Segoe UI',system-ui,sans-serif;
+  --font-jawi:'Noto Naskh Arabic','Traditional Arabic','Arial',serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0f1815; --surface:#16231f; --ink:#e4ece8; --muted:#9bb0a8; --line:#2a3b36;
+    --accent:#4fb99f; --accent-ink:#06211a; --accent-soft:#1c3a33;
+    --exam:#e6a24a; --exam-soft:#3a2c14; --cuti:#8fa0b0; --cuti-soft:#1f2a33; --open-soft:#1b2a3d; --open:#8db4e6;
+    --ok:#5fc27f; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0f1815; --surface:#16231f; --ink:#e4ece8; --muted:#9bb0a8; --line:#2a3b36;
+  --accent:#4fb99f; --accent-ink:#06211a; --accent-soft:#1c3a33;
+  --exam:#e6a24a; --exam-soft:#3a2c14; --cuti:#8fa0b0; --cuti-soft:#1f2a33; --open-soft:#1b2a3d; --open:#8db4e6;
+  --ok:#5fc27f; color-scheme:dark;
+}
+*{box-sizing:border-box}
+:root{color-scheme:light}
+:root[data-theme="light"]{color-scheme:light}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){color-scheme:dark}}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:15px;line-height:1.45}
+.wrap{max-width:1180px;margin:0 auto;padding:0 16px}
+header.top{padding:28px 0 18px}
+.eyebrow{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
+h1{font-family:var(--font-display);font-size:clamp(26px,4.2vw,40px);line-height:1.08;margin:6px 0 8px;font-weight:700;text-wrap:balance;letter-spacing:-.01em}
+.toprow{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.btn.small{min-height:34px;padding:0 12px;font-size:13px}
+.sub{margin:0;color:var(--muted);max-width:68ch}
+.controls{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line);padding:12px 0}
+.ctl-row{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end}
+.field{display:flex;flex-direction:column;gap:4px;min-width:150px;flex:1 1 170px}
+.field.narrow{flex:0 1 150px}
+.field label{font-size:12px;font-weight:600;color:var(--muted);letter-spacing:.02em}
+select,input[type=text]{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:9px 10px;min-height:42px;width:100%}
+select{appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 50%);background-position:calc(100% - 17px) 50%,calc(100% - 12px) 50%;background-size:5px 5px,5px 5px;background-repeat:no-repeat;padding-right:32px}
+select:focus-visible,input:focus-visible,button:focus-visible,summary:focus-visible{outline:3px solid var(--accent);outline-offset:1px}
+.btn{font:inherit;font-weight:600;color:var(--accent-ink);background:var(--accent);border:0;border-radius:8px;padding:0 16px;min-height:42px;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--accent);border:1px solid var(--accent)}
+.btn:hover{filter:brightness(1.07)}
+.hint{font-size:12.5px;color:var(--muted);margin:8px 0 0}
+.qpanel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin:18px 0 0}
+.qpanel h2{font-family:var(--font-display);font-size:17px;margin:0 0 10px}
+.qgrid{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end}
+.qgrid .field.narrow{flex:0 1 110px;min-width:90px}
+input[type=number]{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:9px 10px;min-height:42px;width:100%}
+input[type=number]:disabled{opacity:.5}
+td.inp{width:92px}
+input.qin{min-height:34px;padding:4px 6px;text-align:right;width:76px;font-variant-numeric:tabular-nums}
+input.qin.set{border-color:var(--exam);background:var(--exam-soft)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:18px 0 6px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+.stat b{display:block;font-family:var(--font-display);font-size:26px;line-height:1.1;font-variant-numeric:tabular-nums}
+.stat span{font-size:12.5px;color:var(--muted)}
+.bar{height:6px;background:var(--line);border-radius:3px;margin-top:8px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--ok);width:0}
+.notice{background:var(--exam-soft);border-left:4px solid var(--exam);padding:10px 14px;border-radius:6px;margin:14px 0;font-size:14px}
+.notice p{margin:0 0 4px}.notice p:last-child{margin:0}
+.tablebox{background:var(--surface);border:1px solid var(--line);border-radius:10px;overflow-x:auto;margin:14px 0}
+table{border-collapse:collapse;width:100%;min-width:760px}
+th{font-size:12px;text-align:left;color:var(--muted);font-weight:600;letter-spacing:.03em;padding:10px 10px;border-bottom:2px solid var(--line);background:var(--surface);white-space:nowrap}
+th.n,td.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+td{padding:9px 10px;vertical-align:top;border-top:1px solid var(--line)}
+tbody.week:hover td{background:color-mix(in srgb,var(--accent-soft) 45%,transparent)}
+tbody.week.now td{background:var(--accent-soft)}
+tbody.week.done td.title{color:var(--muted)}
+td.mka{font-family:var(--font-display);font-weight:700;font-size:15px;white-space:nowrap;color:var(--accent)}
+td.date{white-space:nowrap}
+td.date small{display:block;color:var(--muted);font-size:12px}
+td.date .hol{display:block;color:var(--exam);font-size:12px;max-width:190px;white-space:normal;margin-top:2px}
+td.ck{width:36px;padding-right:0}
+td.ck input{width:20px;height:20px;accent-color:var(--ok);cursor:pointer}
+.bid{display:inline-block;font-size:11px;font-weight:600;border-radius:4px;padding:1px 6px;margin-right:6px;background:var(--accent-soft);color:var(--accent);vertical-align:1px}
+.cont{font-size:12px;color:var(--muted);margin-left:6px}
+.jawi{font-family:var(--font-jawi);font-size:18px;line-height:1.7}
+tr.sep td{border-top:0;padding:18px 10px 8px;font-family:var(--font-display);font-weight:700;font-size:16px;background:var(--bg);letter-spacing:.01em}
+tr.sep td small{font-family:var(--font-body);font-weight:400;color:var(--muted);margin-left:8px;font-size:13px}
+tr.cuti td{background:repeating-linear-gradient(135deg,var(--cuti-soft),var(--cuti-soft) 8px,transparent 8px,transparent 16px);color:var(--cuti);font-weight:600;font-size:13px;padding:7px 10px}
+tr.cuti td.tail{text-align:right;font-weight:400;white-space:nowrap}
+tr.spec td.title{font-weight:600}
+tr.spec.exam td{background:var(--exam-soft)} tr.spec.open td,tr.spec.admin td{background:var(--open-soft)}
+.tag{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.05em;border-radius:4px;padding:2px 7px;margin-right:8px;color:var(--accent-ink);background:var(--open)}
+tr.spec.exam .tag{background:var(--exam)}
+tfoot td{border-top:2px solid var(--line);font-weight:600;background:var(--surface)}
+.foot{font-size:12.5px;color:var(--muted);margin:6px 0 40px}
+.foot p{margin:0 0 6px;max-width:90ch}
+dialog{border:1px solid var(--line);border-radius:12px;background:var(--surface);color:var(--ink);max-width:min(640px,92vw);width:100%;padding:18px}
+dialog::backdrop{background:rgba(0,0,0,.45)}
+dialog textarea{width:100%;height:220px;font:12px/1.4 ui-monospace,Menlo,monospace;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:8px}
+.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:9px 16px;border-radius:8px;font-size:14px;opacity:0;pointer-events:none;transition:opacity .2s}
+.toast.show{opacity:1}
+.empty{padding:28px;text-align:center;color:var(--muted)}
+@media (max-width:700px){.controls{position:static}}
+@media (max-width:560px){.field.narrow{flex:1 1 100%} td,th{padding:8px 7px}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+@media print{
+  @page{size:A4 landscape;margin:10mm}
+  body{background:#fff;color:#000;font-size:11px}
+  .controls,.btn,.hint,.stats .bar,td.ck,th.ck{display:none!important}
+  .tablebox{border:0;overflow:visible} table{min-width:0}
+  tbody{break-inside:avoid}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="toprow"><div class="eyebrow">Pendidikan Islam · Sesi Persekolahan 2027</div>
+    <button class="btn ghost small" id="btnTheme" type="button" aria-label="Tukar tema paparan">Tema: Auto</button></div>
+    <h1>Kontrak Latihan Murid 2027</h1>
+    <p class="sub">Pilih kumpulan sekolah dan tahun. Setiap minggu persekolahan (MKA) dipaparkan dengan tarikh sebenar mengikut Kalendar Akademik 2027, lengkap dengan bilangan soalan.</p>
+  </header>
+</div>
+
+<div class="controls">
+  <div class="wrap">
+    <div class="ctl-row">
+      <div class="field">
+        <label for="selGroup">Kumpulan sekolah</label>
+        <select id="selGroup"></select>
+      </div>
+      <div class="field narrow">
+        <label for="selYear">Tahun</label>
+        <select id="selYear"></select>
+      </div>
+      <div class="field">
+        <label for="selView">Paparan</label>
+        <select id="selView"></select>
+      </div>
+      <div class="field">
+        <label for="selGuru">Nama guru</label>
+        <select id="selGuru"></select>
+        <input type="text" id="inGuru" autocomplete="off" placeholder="Taip nama guru" hidden aria-label="Nama guru (taip sendiri)">
+      </div>
+      <div class="field narrow">
+        <label for="selKelas">Kelas</label>
+        <select id="selKelas"></select>
+        <input type="text" id="inKelas" autocomplete="off" placeholder="Taip nama kelas" hidden aria-label="Kelas (taip sendiri)">
+      </div>
+      <button class="btn ghost" id="btnCopy" type="button">Salin jadual</button>
+      <button class="btn" id="btnPdf" type="button" hidden>Muat turun PDF</button>
+      <button class="btn" id="btnDocx" type="button" hidden>Muat turun Word</button>
+    </div>
+    <p class="hint" id="groupHint"></p>
+  </div>
+</div>
+
+<main class="wrap">
+  <section class="qpanel" aria-label="Tetapan soalan">
+    <h2>Tetapan soalan</h2>
+    <div class="qgrid">
+      <div class="field"><label for="qMode">Jumlah soalan setiap minggu</label>
+        <select id="qMode"><option value="file">Ikut fail kontrak</option><option value="custom">Tetapkan sendiri</option></select></div>
+      <div class="field narrow"><label for="qN">Soalan seminggu</label><input type="number" id="qN" min="0" max="999" inputmode="numeric"></div>
+      <div class="field narrow"><label for="rR">Rendah</label><input type="number" id="rR" min="0" step="1" inputmode="numeric"></div>
+      <div class="field narrow"><label for="rS">Sederhana</label><input type="number" id="rS" min="0" step="1" inputmode="numeric"></div>
+      <div class="field narrow"><label for="rT">Tinggi</label><input type="number" id="rT" min="0" step="1" inputmode="numeric"></div>
+      <button class="btn ghost" id="rReset" type="button">Set semula 5 : 3 : 2</button>
+      <button class="btn ghost" id="qClear" type="button">Kosongkan ubah suai minggu</button>
+    </div>
+    <p class="hint" id="rPct"></p>
+    <p class="hint">Aras soalan Rendah : Sederhana : Tinggi mengikut formula 5 : 3 : 2. Untuk jumlah berbeza pada minggu tertentu, taip dalam lajur Ubah jumlah di jadual.</p>
+  </section>
+  <section class="stats" id="stats" aria-live="polite"></section>
+  <div id="notices"></div>
+  <div class="tablebox"><table id="tbl" aria-label="Jadual kontrak latihan murid"></table></div>
+  <div class="foot" id="foot"></div>
+</main>
+
+<dialog id="dlg">
+  <p style="margin-top:0"><b>Salin secara manual</b><br>Pelayar menghalang salinan automatik. Pilih semua teks di bawah, salin, kemudian tampal dalam Excel atau Google Sheets.</p>
+  <textarea id="dlgText" readonly></textarea>
+  <p style="margin-bottom:0;text-align:right"><button class="btn ghost" id="dlgClose" type="button">Tutup</button></p>
+</dialog>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+const DATA = {"cal":{"A":{"label":"Kumpulan A","negeri":"Kedah, Kelantan, Terengganu","weekdays":"Ahad – Khamis","rows":[{"type":"week","mka":1,"frm":"2027-01-04","to":"2027-01-07","hari":4,"penggal":1,"notes":[]},{"type":"week","mka":2,"frm":"2027-01-10","to":"2027-01-14","hari":5,"penggal":1,"notes":[]},{"type":"week","mka":3,"frm":"2027-01-17","to":"2027-01-21","hari":5,"penggal":1,"notes":[]},{"type":"week","mka":4,"frm":"2027-01-24","to":"2027-01-28","hari":5,"penggal":1,"notes":[]},{"type":"week","mka":5,"frm":"2027-01-31","to":"2027-02-04","hari":5,"penggal":1,"notes":[]},{"type":"cuti","name":"Cuti Tahun Baharu Cina","frm":"2027-02-07","to":"2027-02-11","penggal":1,"short":true},{"type":"week","mka":6,"frm":"2027-02-14","to":"2027-02-18","hari":5,"penggal":1,"notes":[]},{"type":"week","mka":7,"frm":"2027-02-21","to":"2027-02-25","hari":5,"penggal":1,"notes":[]},{"type":"week","mka":8,"frm":"2027-02-28","to":"2027-03-04","hari":5,"penggal":1,"notes":[]},{"type":"cuti","name":"Cuti Penggal 1","frm":"2027-03-05","to":"2027-03-13","penggal":1,"short":false},{"type":"week","mka":9,"frm":"2027-03-15","to":"2027-03-18","hari":4,"penggal":1,"notes":[["2027-03-14","Cuti tambahan KPM – Hari Raya Puasa"]]},{"type":"week","mka":10,"frm":"2027-03-21","to":"2027-03-25","hari":5,"penggal":1,"notes":[]},{"type":"week","mka":11,"frm":"2027-03-28","to":"2027-04-01","hari":5,"penggal":1,"notes":[]},{"type":"week","mka":12,"frm":"2027-04-04","to":"2027-04-08","hari":5,"penggal":1,"notes":[]},{"type":"week","mka":13,"frm":"2027-04-11","to":"2027-04-15","hari":5,"penggal":1,"notes":[]},{"type":"week","mka":14,"frm":"2027-04-18","to":"2027-04-22","hari":5,"penggal":1,"notes":[]},{"type":"week","mka":15,"frm":"2027-04-25","to":"2027-04-29","hari":5,"penggal":1,"notes":[]},{"type":"week","mka":16,"frm":"2027-05-03","to":"2027-05-06","hari":4,"penggal":1,"notes":[["2027-05-02","Cuti ganti Hari Pekerja"]]},{"type":"week","mka":17,"frm":"2027-05-09","to":"2027-05-13","hari":5,"penggal":1,"notes":[]},{"type":"cuti","name":"Cuti Hari Raya Korban & Hari Wesak","frm":"2027-05-16","to":"2027-05-20","penggal":1,"short":true},{"type":"cuti","name":"Cuti Pertengahan Tahun","frm":"2027-05-21","to":"2027-06-05","penggal":1,"short":false},{"type":"week","mka":18,"frm":"2027-06-08","to":"2027-06-10","hari":3,"penggal":2,"notes":[["2027-06-06","Awal Muharram"],["2027-06-07","Hari Keputeraan YDP Agong"]]},{"type":"week","mka":19,"frm":"2027-06-13","to":"2027-06-17","hari":5,"penggal":2,"notes":[]},{"type":"week","mka":20,"frm":"2027-06-20","to":"2027-06-24","hari":5,"penggal":2,"notes":[]},{"type":"week","mka":21,"frm":"2027-06-27","to":"2027-07-01","hari":5,"penggal":2,"notes":[]},{"type":"week","mka":22,"frm":"2027-07-04","to":"2027-07-08","hari":5,"penggal":2,"notes":[]},{"type":"week","mka":23,"frm":"2027-07-11","to":"2027-07-15","hari":5,"penggal":2,"notes":[]},{"type":"week","mka":24,"frm":"2027-07-18","to":"2027-07-22","hari":5,"penggal":2,"notes":[]},{"type":"week","mka":25,"frm":"2027-07-25","to":"2027-07-29","hari":5,"penggal":2,"notes":[]},{"type":"week","mka":26,"frm":"2027-08-01","to":"2027-08-05","hari":5,"penggal":2,"notes":[]},{"type":"week","mka":27,"frm":"2027-08-08","to":"2027-08-12","hari":5,"penggal":2,"notes":[]},{"type":"week","mka":28,"frm":"2027-08-16","to":"2027-08-19","hari":4,"penggal":2,"notes":[["2027-08-15","Maulidur Rasul"]]},{"type":"week","mka":29,"frm":"2027-08-22","to":"2027-08-26","hari":5,"penggal":2,"notes":[]},{"type":"cuti","name":"Cuti Penggal 2","frm":"2027-08-27","to":"2027-09-04","penggal":2,"short":false},{"type":"week","mka":30,"frm":"2027-09-05","to":"2027-09-09","hari":5,"penggal":2,"notes":[]},{"type":"week","mka":31,"frm":"2027-09-12","to":"2027-09-15","hari":4,"penggal":2,"notes":[["2027-09-16","Hari Malaysia"]]},{"type":"week","mka":32,"frm":"2027-09-19","to":"2027-09-23","hari":5,"penggal":2,"notes":[]},{"type":"week","mka":33,"frm":"2027-09-26","to":"2027-09-30","hari":5,"penggal":2,"notes":[]},{"type":"week","mka":34,"frm":"2027-10-03","to":"2027-10-07","hari":5,"penggal":2,"notes":[]},{"type":"week","mka":35,"frm":"2027-10-10","to":"2027-10-14","hari":5,"penggal":2,"notes":[]},{"type":"week","mka":36,"frm":"2027-10-17","to":"2027-10-21","hari":5,"penggal":2,"notes":[]},{"type":"week","mka":37,"frm":"2027-10-24","to":"2027-10-26","hari":3,"penggal":2,"notes":[["2027-10-27","Cuti tambahan KPM – Deepavali"],["2027-10-28","Deepavali"]]},{"type":"week","mka":38,"frm":"2027-10-31","to":"2027-11-04","hari":5,"penggal":2,"notes":[]},{"type":"week","mka":39,"frm":"2027-11-07","to":"2027-11-11","hari":5,"penggal":2,"notes":[]},{"type":"week","mka":40,"frm":"2027-11-14","to":"2027-11-18","hari":5,"penggal":2,"notes":[]},{"type":"week","mka":41,"frm":"2027-11-21","to":"2027-11-25","hari":5,"penggal":2,"notes":[]},{"type":"week","mka":42,"frm":"2027-11-28","to":"2027-12-02","hari":5,"penggal":2,"notes":[]},{"type":"cuti","name":"Cuti Akhir Persekolahan","frm":"2027-12-03","to":"2027-12-31","penggal":2,"short":false}],"nweeks":42},"B":{"label":"Kumpulan B","negeri":"Johor, Melaka, Negeri Sembilan, Pahang, Perak, Perlis, Pulau Pinang, Sabah, Sarawak, Selangor, WP Kuala Lumpur, WP Labuan, WP Putrajaya","weekdays":"Isnin – Jumaat","rows":[{"type":"week","mka":1,"frm":"2027-01-04","to":"2027-01-08","hari":5,"penggal":1,"notes":[]},{"type":"week","mka":2,"frm":"2027-01-11","to":"2027-01-15","hari":5,"penggal":1,"notes":[]},{"type":"week","mka":3,"frm":"2027-01-18","to":"2027-01-22","hari":5,"penggal":1,"notes":[]},{"type":"week","mka":4,"frm":"2027-01-25","to":"2027-01-29","hari":5,"penggal":1,"notes":[]},{"type":"week","mka":5,"frm":"2027-02-01","to":"2027-02-04","hari":4,"penggal":1,"notes":[["2027-02-05","Cuti tambahan KPM – Tahun Baharu Cina"]]},{"type":"cuti","name":"Cuti Tahun Baharu Cina","frm":"2027-02-08","to":"2027-02-12","penggal":1,"short":true},{"type":"week","mka":6,"frm":"2027-02-15","to":"2027-02-19","hari":5,"penggal":1,"notes":[]},{"type":"week","mka":7,"frm":"2027-02-22","to":"2027-02-26","hari":5,"penggal":1,"notes":[]},{"type":"week","mka":8,"frm":"2027-03-01","to":"2027-03-05","hari":5,"penggal":1,"notes":[]},{"type":"cuti","name":"Cuti Penggal 1","frm":"2027-03-06","to":"2027-03-14","penggal":1,"short":false},{"type":"week","mka":9,"frm":"2027-03-15","to":"2027-03-19","hari":5,"penggal":1,"notes":[]},{"type":"week","mka":10,"frm":"2027-03-22","to":"2027-03-26","hari":5,"penggal":1,"notes":[]},{"type":"week","mka":11,"frm":"2027-03-29","to":"2027-04-02","hari":5,"penggal":1,"notes":[]},{"type":"week","mka":12,"frm":"2027-04-05","to":"2027-04-09","hari":5,"penggal":1,"notes":[]},{"type":"week","mka":13,"frm":"2027-04-12","to":"2027-04-16","hari":5,"penggal":1,"notes":[]},{"type":"week","mka":14,"frm":"2027-04-19","to":"2027-04-23","hari":5,"penggal":1,"notes":[]},{"type":"week","mka":15,"frm":"2027-04-26","to":"2027-04-30","hari":5,"penggal":1,"notes":[]},{"type":"week","mka":16,"frm":"2027-05-03","to":"2027-05-07","hari":5,"penggal":1,"notes":[]},{"type":"week","mka":17,"frm":"2027-05-10","to":"2027-05-14","hari":5,"penggal":1,"notes":[]},{"type":"cuti","name":"Cuti Hari Raya Korban & Hari Wesak","frm":"2027-05-17","to":"2027-05-21","penggal":1,"short":true},{"type":"cuti","name":"Cuti Pertengahan Tahun","frm":"2027-05-22","to":"2027-06-06","penggal":1,"short":false},{"type":"week","mka":18,"frm":"2027-06-08","to":"2027-06-11","hari":4,"penggal":2,"notes":[["2027-06-07","Hari Keputeraan YDP Agong / ganti Awal Muharram"]]},{"type":"week","mka":19,"frm":"2027-06-14","to":"2027-06-18","hari":5,"penggal":2,"notes":[]},{"type":"week","mka":20,"frm":"2027-06-21","to":"2027-06-25","hari":5,"penggal":2,"notes":[]},{"type":"week","mka":21,"frm":"2027-06-28","to":"2027-07-02","hari":5,"penggal":2,"notes":[]},{"type":"week","mka":22,"frm":"2027-07-05","to":"2027-07-09","hari":5,"penggal":2,"notes":[]},{"type":"week","mka":23,"frm":"2027-07-12","to":"2027-07-16","hari":5,"penggal":2,"notes":[]},{"type":"week","mka":24,"frm":"2027-07-19","to":"2027-07-23","hari":5,"penggal":2,"notes":[]},{"type":"week","mka":25,"frm":"2027-07-26","to":"2027-07-30","hari":5,"penggal":2,"notes":[]},{"type":"week","mka":26,"frm":"2027-08-02","to":"2027-08-06","hari":5,"penggal":2,"notes":[]},{"type":"week","mka":27,"frm":"2027-08-09","to":"2027-08-13","hari":5,"penggal":2,"notes":[]},{"type":"week","mka":28,"frm":"2027-08-17","to":"2027-08-20","hari":4,"penggal":2,"notes":[["2027-08-16","Cuti ganti Maulidur Rasul"]]},{"type":"week","mka":29,"frm":"2027-08-23","to":"2027-08-27","hari":5,"penggal":2,"notes":[]},{"type":"cuti","name":"Cuti Penggal 2","frm":"2027-08-28","to":"2027-09-05","penggal":2,"short":false},{"type":"week","mka":30,"frm":"2027-09-06","to":"2027-09-10","hari":5,"penggal":2,"notes":[]},{"type":"week","mka":31,"frm":"2027-09-13","to":"2027-09-17","hari":4,"penggal":2,"notes":[["2027-09-16","Hari Malaysia"]]},{"type":"week","mka":32,"frm":"2027-09-20","to":"2027-09-24","hari":5,"penggal":2,"notes":[]},{"type":"week","mka":33,"frm":"2027-09-27","to":"2027-10-01","hari":5,"penggal":2,"notes":[]},{"type":"week","mka":34,"frm":"2027-10-04","to":"2027-10-08","hari":5,"penggal":2,"notes":[]},{"type":"week","mka":35,"frm":"2027-10-11","to":"2027-10-15","hari":5,"penggal":2,"notes":[]},{"type":"week","mka":36,"frm":"2027-10-18","to":"2027-10-22","hari":5,"penggal":2,"notes":[]},{"type":"week","mka":37,"frm":"2027-10-25","to":"2027-10-26","hari":2,"penggal":2,"notes":[["2027-10-27","Cuti tambahan KPM – Deepavali"],["2027-10-28","Deepavali"],["2027-10-29","Cuti tambahan KPM – Deepavali"]]},{"type":"week","mka":38,"frm":"2027-11-01","to":"2027-11-05","hari":5,"penggal":2,"notes":[]},{"type":"week","mka":39,"frm":"2027-11-08","to":"2027-11-12","hari":5,"penggal":2,"notes":[]},{"type":"week","mka":40,"frm":"2027-11-15","to":"2027-11-19","hari":5,"penggal":2,"notes":[]},{"type":"week","mka":41,"frm":"2027-11-22","to":"2027-11-26","hari":5,"penggal":2,"notes":[]},{"type":"week","mka":42,"frm":"2027-11-29","to":"2027-12-03","hari":5,"penggal":2,"notes":[]},{"type":"cuti","name":"Cuti Akhir Persekolahan","frm":"2027-12-04","to":"2027-12-31","penggal":2,"short":false}],"nweeks":42}},"contracts":{"4":{"year":4,"mode":"rst","guru":"NUR AZIMA BINTI ABDULLAH","kelas":"4 AMANAH","weeks":[{"mka":1,"kind":"open","title":"Minggu Suai Kenal (Tiada Pdp)"},{"mka":2,"kind":"teach","items":[{"t":"1.1 ممباخ دان مغعملكن سورة التكاثر دغن بتول دان برتجويد دالم كهيدوفن هارين سخارا برادب دان استقامة."},{"t":"3.1 ميقيني كونسيف نام الله العظيم  دان الحميد  سرتا مغفليكاسيكنث دالم كهيدوفن سخارا برادب دان استقامة."},{"t":"7.1 مغنل،ممباخ دان منوليس فركاتاءن يغ مغاندوغي حروف همزه دغن بتول سخارا برادب دان استقامة."}],"bt":4,"r":10,"s":6,"t":4},{"mka":3,"kind":"teach","items":[{"t":"1.1 ممباخ دان مغعملكن سورة التكاثر دغن بتول دان برتجويد دالم كهيدوفن هارين سخارا برادب دان استقامة."},{"t":"3.1 ميقيني كونسيف نام الله العظيم  دان الحميد  سرتا مغفليكاسيكنث دالم كهيدوفن سخارا برادب دان استقامة."},{"t":"7.1 مغنل،ممباخ دان منوليس فركاتاءن يغ مغاندوغي حروف همزه دغن بتول سخارا برادب دان استقامة."}],"bt":4,"r":10,"s":6,"t":4},{"mka":4,"kind":"teach","items":[{"t":"1.1 ممباخ دان مغعملكن سورة التكاثر دغن بتول دان برتجويد دالم كهيدوفن هارين سخارا برادب دان استقامة."},{"t":"4.1  مروموس دان مغعملكن كونسيف برسوخي دغن بتول سخارا برادب."},{"t":"7.1 مغنل،ممباخ دان منوليس فركاتاءن يغ مغاندوغي حروف همزه دغن بتول سخارا برادب دان استقامة."}],"bt":4,"r":10,"s":6,"t":4},{"mka":5,"kind":"teach","items":[{"t":"1.1 ممباخ دان مغعملكن سورة التكاثر دغن بتول دان برتجويد دالم كهيدوفن هارين سخارا برادب دان استقامة."},{"t":"4.1  مروموس دان مغعملكن كونسيف برسوخي دغن بتول سخارا برادب."},{"t":"7.1 مغنل،ممباخ دان منوليس فركاتاءن يغ مغاندوغي حروف همزه دغن بتول سخارا برادب دان استقامة."}],"bt":4,"r":10,"s":6,"t":4},{"mka":6,"kind":"teach","items":[{"t":"1.1 ممباخ دان مغعملكن سورة التكاثر دغن بتول دان برتجويد دالم كهيدوفن هارين سخارا برادب دان استقامة."},{"t":"4.1  مروموس دان مغعملكن كونسيف برسوخي دغن بتول سخارا برادب."},{"t":"7.1 مغنل،ممباخ دان منوليس فركاتاءن يغ مغاندوغي حروف همزه دغن بتول سخارا برادب دان استقامة."}],"bt":4,"r":10,"s":6,"t":4},{"mka":7,"kind":"teach","items":[{"t":"1.1 ممباخ دان مغعملكن سورة التكاثر دغن بتول دان برتجويد دالم كهيدوفن هارين سخارا برادب دان استقامة."},{"t":"5.1 مروموس اعتبار فنريماءن مشاركت يثرب ترهادف دعوه نبي محمد ﷺ ملالوءي فرجنجين عقبه فرتام دان كدوا سخارا برادب دان استقامة."},{"t":"7.1 مغنل،ممباخ دان منوليس فركاتاءن يغ مغاندوغي حروف همزه دغن بتول سخارا برادب دان استقامة."}],"bt":4,"r":10,"s":6,"t":4},{"mka":8,"kind":"teach","items":[{"t":"1.1 ممباخ دان مغعملكن سورة التكاثر دغن بتول دان برتجويد دالم كهيدوفن هارين سخارا برادب دان استقامة."},{"t":"5.1 مروموس اعتبار فنريماءن مشاركت يثرب ترهادف دعوه نبي محمد ﷺ ملالوءي فرجنجين عقبه فرتام دان كدوا سخارا برادب دان استقامة."},{"t":"7.1 مغنل،ممباخ دان منوليس فركاتاءن يغ مغاندوغي حروف همزه دغن بتول سخارا برادب دان استقامة."}],"bt":4,"r":10,"s":6,"t":4},{"mka":9,"kind":"teach","items":[{"t":"1.1 ممباخ دان مغعملكن سورة التكاثر دغن بتول دان برتجويد دالم كهيدوفن هارين سخارا برادب دان استقامة."},{"t":"5.1 مروموس اعتبار فنريماءن مشاركت يثرب ترهادف دعوه نبي محمد ﷺ ملالوءي فرجنجين عقبه فرتام دان كدوا سخارا برادب دان استقامة."},{"t":"7.1 مغنل،ممباخ دان منوليس فركاتاءن يغ مغاندوغي حروف همزه دغن بتول سخارا برادب دان استقامة."}],"bt":4,"r":10,"s":6,"t":4},{"mka":10,"kind":"teach","items":[{"t":"1.6 ممباخ اية يغ مغاندوغي باخاءن ميم ساكنة دغن بتول دان برتجويد سخارا برادب دان استقامة."},{"t":"5.1 مروموس اعتبار فنريماءن مشاركت يثرب ترهادف دعوه نبي محمد ﷺ ملالوءي فرجنجين عقبه فرتام دان كدوا سخارا برادب دان استقامة."},{"t":"7.1 مغنل،ممباخ دان منوليس فركاتاءن يغ مغاندوغي حروف همزه دغن بتول سخارا برادب دان استقامة."}],"bt":4,"r":10,"s":6,"t":4},{"mka":11,"kind":"teach","items":[{"t":"1.6 ممباخ اية يغ مغاندوغي باخاءن ميم ساكنة دغن بتول دان برتجويد سخارا برادب دان استقامة."},{"t":"6.1 مروموس كونسيف ادب  مناءيقي كندراءن دان مغعملكنث سخارا برادب دان استقامة."},{"t":"7.1 مغنل،ممباخ دان منوليس فركاتاءن يغ مغاندوغي حروف همزه دغن بتول سخارا برادب دان استقامة."}],"bt":4,"r":10,"s":6,"t":4},{"mka":12,"kind":"teach","items":[{"t":"1.6 ممباخ اية يغ مغاندوغي باخاءن ميم ساكنة دغن بتول دان برتجويد سخارا برادب دان استقامة."},{"t":"6.1 مروموس كونسيف ادب  مناءيقي كندراءن دان مغعملكنث سخارا برادب دان استقامة."},{"t":"7.1 مغنل،ممباخ دان منوليس فركاتاءن يغ مغاندوغي حروف همزه دغن بتول سخارا برادب دان استقامة."}],"bt":4,"r":10,"s":6,"t":4},{"mka":13,"kind":"teach","items":[{"t":"1.6 ممباخ اية يغ مغاندوغي باخاءن ميم ساكنة دغن بتول دان برتجويد سخارا برادب دان استقامة."},{"t":"3.2 ميقيني كونسيف برايمان كفد رسول دان مغفليكاسيكنث دالم كهيدوفن سخارا برادب دان استقامة."},{"t":"7.2 مغنل، ممباخ دان منوليس فركاتاءن تراديسي دغن بتول سخارا برادب دان استقامة."}],"bt":4,"r":10,"s":6,"t":4},{"mka":14,"kind":"teach","items":[{"t":"1.6 ممباخ اية يغ مغاندوغي باخاءن ميم ساكنة دغن بتول دان برتجويد سخارا برادب دان استقامة."},{"t":"3.2 ميقيني كونسيف برايمان كفد رسول دان مغفليكاسيكنث دالم كهيدوفن سخارا برادب دان استقامة."},{"t":"7.2 مغنل، ممباخ دان منوليس فركاتاءن تراديسي دغن بتول سخارا برادب دان استقامة."}],"bt":4,"r":10,"s":6,"t":4},{"mka":15,"kind":"teach","items":[{"t":"1.5 مروموس، مغعمل دان مغحياتي سورة الإخلاص سخارا برادب دان استقامة."},{"t":"4.2 مروموس كونسيف اذان دان اقامة سرتا مغعملكنث دان مغحياتيث سخارا برادب دان استقامه."},{"t":"7.2 مغنل، ممباخ دان منوليس فركاتاءن تراديسي دغن بتول سخارا برادب دان استقامة."}],"bt":4,"r":10,"s":6,"t":4},{"mka":16,"kind":"upsa","title":"UPSA"},{"mka":17,"kind":"teach","items":[{"t":"1.5 مروموس، مغعمل دان مغحياتي سورة الإخلاص سخارا برادب دان استقامة."},{"t":"4.2 مروموس كونسيف اذان دان اقامة سرتا مغعملكنث دان مغحياتيث سخارا برادب دان استقامه."},{"t":"7.2 مغنل، ممباخ دان منوليس فركاتاءن تراديسي دغن بتول سخارا برادب دان استقامة."}],"bt":4,"r":10,"s":6,"t":4},{"mka":18,"kind":"teach","items":[{"t":"1.1ممباخ دان مغعملكن سورة التكاثر دغن بتول دان برتجويد دالم كهيدوفن هارين سخارا برادب دان استقامة."},{"t":"5.2 مروموس اعتبار كأوغضولن صيفت فطانة نبي محمد ﷺ سخارا برادب دان استقامه."},{"t":"7.2 مغنل، ممباخ دان منوليس فركاتاءن تراديسي دغن بتول سخارا برادب دان استقامة."}],"bt":4,"r":10,"s":6,"t":4},{"mka":19,"kind":"teach","items":[{"t":"1.1ممباخ دان مغعملكن سورة التكاثر دغن بتول دان برتجويد دالم كهيدوفن هارين سخارا برادب دان استقامة."},{"t":"5.2 مروموس اعتبار كأوغضولن صيفت فطانة نبي محمد ﷺ سخارا برادب دان استقامه."},{"t":"7.2 مغنل، ممباخ دان منوليس فركاتاءن تراديسي دغن بتول سخارا برادب دان استقامة."}],"bt":4,"r":10,"s":6,"t":4},{"mka":20,"kind":"teach","items":[{"t":"1.7 ممباخ اية يغ مغاندوغي باخاءن قلقلة دغن بتول دان برتجويد سخارا برادب دان استقامة."},{"t":"5.2 مروموس اعتبار كأوغضولن صيفت فطانة نبي محمد ﷺ سخارا برادب دان استقامه."},{"t":"7.2 مغنل، ممباخ دان منوليس فركاتاءن تراديسي دغن بتول سخارا برادب دان استقامة."}],"bt":4,"r":10,"s":6,"t":4},{"mka":21,"kind":"teach","items":[{"t":"1.7 ممباخ اية يغ مغاندوغي باخاءن قلقلة دغن بتول دان برتجويد سخارا برادب دان استقامة."},{"t":"6.2 مروموس ادب برياضة  يغ منفتي شرع دان مغعملكنث سخارا برادب دان استقامة."},{"t":"7.2 مغنل، ممباخ دان منوليس فركاتاءن تراديسي دغن بتول سخارا برادب دان استقامة."}],"bt":4,"r":10,"s":6,"t":4},{"mka":22,"kind":"teach","items":[{"t":"1.7 ممباخ اية يغ مغاندوغي باخاءن قلقلة دغن بتول دان برتجويد سخارا برادب دان استقامة."},{"t":"6.2 مروموس ادب برياضة  يغ منفتي شرع دان مغعملكنث سخارا برادب دان استقامة."},{"t":"7.2 مغنل، ممباخ دان منوليس فركاتاءن تراديسي دغن بتول سخارا برادب دان استقامة."}],"bt":4,"r":10,"s":6,"t":4},{"mka":23,"kind":"teach","items":[{"t":"1.7 ممباخ اية يغ مغاندوغي باخاءن قلقلة دغن بتول دان برتجويد سخارا برادب دان استقامة."},{"t":"2.1 مروموس دان مغحياتي حديث ممولياكن تتامو سرتا مغعملكنث سخارا برادب دان استقامه."},{"t":"7.3 مغنل، ممباخ دان منوليس فركاتاءن فينجمن بهاس ايغضريس دغن بتول سخارا برادب دان استقامة."}],"bt":4,"r":10,"s":6,"t":4},{"mka":24,"kind":"teach","items":[{"t":"1.2 ممباخ دان مغعملكن سورة القارعة دغن بتول دان برتجويد دالم كهيدوفن هارين سخارا برادب دان استقامة."},{"t":"2.1 مروموس دان مغحياتي حديث ممولياكن تتامو سرتا مغعملكنث سخارا برادب دان استقامه."},{"t":"7.3 مغنل، ممباخ دان منوليس فركاتاءن فينجمن بهاس ايغضريس دغن بتول سخارا برادب دان استقامة."}],"bt":4,"r":10,"s":6,"t":4},{"mka":25,"kind":"teach","items":[{"t":"1.2 ممباخ دان مغعملكن سورة القارعة دغن بتول دان برتجويد دالم كهيدوفن هارين سخارا برادب دان استقامة."},{"t":"2.1 مروموس دان مغحياتي حديث ممولياكن تتامو سرتا مغعملكنث سخارا برادب دان استقامه."},{"t":"7.3 مغنل، ممباخ دان منوليس فركاتاءن فينجمن بهاس ايغضريس دغن بتول سخارا برادب دان استقامة."}],"bt":4,"r":10,"s":6,"t":4},{"mka":26,"kind":"teach","items":[{"t":"1.2 ممباخ دان مغعملكن سورة القارعة دغن بتول دان برتجويد دالم كهيدوفن هارين سخارا برادب دان استقامة."},{"t":"3.3 مروموس كفنتيغن ممفرتاهنكن عقيدة  درفد كفور دالم كهيدوفن سخارا برادب دان استقامة.."},{"t":"7.3 مغنل، ممباخ دان منوليس فركاتاءن فينجمن بهاس ايغضريس دغن بتول سخارا برادب دان استقامة."}],"bt":4,"r":10,"s":6,"t":4},{"mka":27,"kind":"teach","items":[{"t":"1.2 ممباخ دان مغعملكن سورة القارعة دغن بتول دان برتجويد دالم كهيدوفن هارين سخارا برادب دان استقامة."},{"t":"3.3 مروموس كفنتيغن ممفرتاهنكن عقيدة  درفد كفور دالم كهيدوفن سخارا برادب دان استقامة.."},{"t":"7.3 مغنل، ممباخ دان منوليس فركاتاءن فينجمن بهاس ايغضريس دغن بتول سخارا برادب دان استقامة."}],"bt":4,"r":10,"s":6,"t":4},{"mka":28,"kind":"teach","items":[{"t":"1.3 مغحفظ دان مغعملكن سورة القارعة دغن بتول دان برتجويد دالم صلاة دان كهيدوفن هارين سخارا برادب دان استقامة."},{"t":"4.3 مروموس كونسيف فواسا رمضان دان مغحياتيث سخارا برادب دان استقامة."},{"t":"7.3 مغنل، ممباخ دان منوليس فركاتاءن فينجمن بهاس ايغضريس دغن بتول سخارا برادب دان استقامة."}],"bt":4,"r":10,"s":6,"t":4},{"mka":29,"kind":"teach","items":[{"t":"1.2 ممباخ دان مغعملكن سورة القارعة دغن بتول دان برتجويد دالم كهيدوفن هارين سخارا برادب دان استقامة."},{"t":"4.3 مروموس كونسيف فواسا رمضان دان مغحياتيث سخارا برادب دان استقامة."},{"t":"7.3 مغنل، ممباخ دان منوليس فركاتاءن فينجمن بهاس ايغضريس دغن بتول سخارا برادب دان استقامة."}],"bt":4,"r":10,"s":6,"t":4},{"mka":30,"kind":"teach","items":[{"t":"1.8 مغنل فستي دان ممباخ اية يغ مغاندوغي تندا وقف دغن بتول دان برتجويد سخارا برادب دان استقامة.."},{"t":"4.3 مروموس كونسيف فواسا رمضان دان مغحياتيث سخارا برادب دان استقامة."},{"t":"7.3 مغنل، ممباخ دان منوليس فركاتاءن فينجمن بهاس ايغضريس دغن بتول سخارا برادب دان استقامة."}],"bt":4,"r":10,"s":6,"t":4},{"mka":31,"kind":"teach","items":[{"t":"1.8 مغنل فستي دان ممباخ اية يغ مغاندوغي تندا وقف دغن بتول دان برتجويد سخارا برادب دان استقامة.."},{"t":"5.3 مروموس اعتبار دان منلادني كفريبادين نبي محمد ﷺ دالم بردعوه سخارا برادب دان استقامه."},{"t":"7.3 مغنل، ممباخ دان منوليس فركاتاءن فينجمن بهاس ايغضريس دغن بتول سخارا برادب دان استقامة."}],"bt":4,"r":10,"s":6,"t":4},{"mka":32,"kind":"teach","items":[{"t":"1.8 مغنل فستي دان ممباخ اية يغ مغاندوغي تندا وقف دغن بتول دان برتجويد سخارا برادب دان استقامة.."},{"t":"5.3 مروموس اعتبار دان منلادني كفريبادين نبي محمد ﷺ دالم بردعوه سخارا برادب دان استقامه."},{"t":"7.3 مغنل، ممباخ دان منوليس فركاتاءن فينجمن بهاس ايغضريس دغن بتول سخارا برادب دان استقامة."}],"bt":4,"r":10,"s":6,"t":4},{"mka":33,"kind":"teach","items":[{"t":"1.8 مغنل فستي دان ممباخ اية يغ مغاندوغي تندا وقف دغن بتول دان برتجويد سخارا برادب دان استقامة.."},{"t":"5.3 مروموس اعتبار دان منلادني كفريبادين نبي محمد ﷺ دالم بردعوه سخارا برادب دان استقامه."},{"t":"7.4 مغنل، ممباخ دان منوليس فركاتاءن فينجمن بهاس عرب دغن بتول سخارا برادب دان استقامة."}],"bt":4,"r":10,"s":6,"t":4},{"mka":34,"kind":"teach","items":[{"t":"1.5 مروموس، مغعمل دان مغحياتي سورة الإخلاص سخارا برادب دان استقامة."},{"t":"3.4 مروموس كفنتيغن ممفرتاهنكن عقيدة درفد نفاق سخارا برادب دان استقامة."},{"t":"7.4 مغنل، ممباخ دان منوليس فركاتاءن فينجمن بهاس عرب دغن بتول سخارا برادب دان استقامة."}],"bt":4,"r":10,"s":6,"t":4},{"mka":35,"kind":"uasa","title":"UASA"},{"mka":36,"kind":"teach","items":[{"t":"1.5 مروموس، مغعمل دان مغحياتي سورة الإخلاص سخارا برادب دان استقامة."},{"t":"3.4 مروموس كفنتيغن ممفرتاهنكن عقيدة درفد نفاق سخارا برادب دان استقامة."},{"t":"7.4 مغنل، ممباخ دان منوليس فركاتاءن فينجمن بهاس عرب دغن بتول سخارا برادب دان استقامة."}],"bt":4,"r":10,"s":6,"t":4},{"mka":37,"kind":"teach","items":[{"t":"1.2 ممباخ دان مغعملكن سورة القارعة دغن بتول دان برتجويد دالم كهيدوفن هارين سخارا برادب دان استقامة."},{"t":"6.4 مروموس ادب ترهادف ضورو يغ منفتي شرع دان مغعملكنث سخارا برادب دان استقامة."},{"t":"7.4 مغنل، ممباخ دان منوليس فركاتاءن فينجمن بهاس عرب دغن بتول سخارا برادب دان استقامة."}],"bt":4,"r":10,"s":6,"t":4},{"mka":38,"kind":"teach","items":[{"t":"1.2 ممباخ دان مغعملكن سورة القارعة دغن بتول دان برتجويد دالم كهيدوفن هارين سخارا برادب دان استقامة."},{"t":"6.4 مروموس ادب ترهادف ضورو يغ منفتي شرع دان مغعملكنث سخارا برادب دان استقامة."},{"t":"7.4 مغنل، ممباخ دان منوليس فركاتاءن فينجمن بهاس عرب دغن بتول سخارا برادب دان استقامة."}],"bt":4,"r":10,"s":6,"t":4},{"mka":39,"kind":"admin","title":"MINGGU ULANGKAJI/ PENANDAAN"},{"mka":40,"kind":"admin","title":"PENGURUSAN DATA"},{"mka":41,"kind":"admin","title":"PELAPORAN PBD 2"},{"mka":42,"kind":"admin","title":"BUDAYA TUTUP SEKOLAH"}],"source":"KONTRAK LATIHAN TAHUN 4_.xlsx","mapping":"fail","kerapan":4,"bilwaktu":4},"5":{"year":5,"mode":"rst","guru":"NUR AZIMA BINTI ABDULLAH","kelas":"5 ARIF","weeks":[{"mka":1,"kind":"open","title":"Minggu Suai Kenal (Tiada Pdp)"},{"mka":2,"kind":"teach","items":[{"t":"SK 1.1  SURAH AL-QADR"},{"t":"KHATAM AL-QURAN"},{"t":"SK 3.1 ALMALIK & ALHASIB"},{"t":"SK 7.1 MEMBINA, MENULIS TEKS MENGIKUT TEMA"}],"bt":33,"r":4,"s":1,"t":1},{"mka":3,"kind":"teach","items":[{"t":"SK 1.1  SURAH AL-QADR"},{"t":"KHATAM AL-QURAN"},{"t":"SK 3.1 ALMALIK & ALHASIB"},{"t":"SK 7.1 MEMBINA, MENULIS TEKS MENGIKUT TEMA"}],"bt":33,"r":4,"s":1,"t":1},{"mka":4,"kind":"teach","items":[{"t":"SK 1.3 SURAH AL-QADR"},{"t":"KHATAM AL-QURAN"},{"t":"SK 4.1 TAYAMMUM"},{"t":"SK 7.1 MEMBINA, MENULIS TEKS MENGIKUT TEMA"}],"bt":33,"r":4,"s":1,"t":1},{"mka":5,"kind":"teach","items":[{"t":"SK 1.3 SURAH AL-QADR"},{"t":"KHATAM AL-QURAN"},{"t":"SK 4.1 TAYAMMUM"},{"t":"SK 7.1 MEMBINA, MENULIS TEKS MENGIKUT TEMA"}],"bt":33,"r":4,"s":1,"t":1},{"mka":6,"kind":"teach","items":[{"t":"SK 1.6 SEMPURNAKAN TAJWIDMU"},{"t":"KHATAM AL-QURAN"},{"t":"SK 4.1 TAYAMMUM"},{"t":"SK 7.1 MEMBINA, MENULIS TEKS MENGIKUT TEMA"}],"bt":33,"r":4,"s":1,"t":1},{"mka":7,"kind":"teach","items":[{"t":"SK 1.6 SEMPURNAKAN TAJWIDMU"},{"t":"KHATAM AL-QURAN"},{"t":"SK 4.1 TAYAMMUM"},{"t":"SK 7.1 MEMBINA, MENULIS TEKS MENGIKUT TEMA"}],"bt":33,"r":4,"s":1,"t":1},{"mka":8,"kind":"teach","items":[{"t":"SK 1.6 SEMPURNAKAN TAJWIDMU"},{"t":"KHATAM AL-QURAN"},{"t":"SK 5.1 HIJRAH"},{"t":"SK 7.1 MEMBINA, MENULIS TEKS MENGIKUT TEMA"}],"bt":33,"r":4,"s":1,"t":1},{"mka":9,"kind":"teach","items":[{"t":"SK 1.6 SEMPURNAKAN TAJWIDMU"},{"t":"KHATAM AL-QURAN"},{"t":"SK 5.1 HIJRAH"},{"t":"SK 7.1 MEMBINA, MENULIS TEKS MENGIKUT TEMA"}],"bt":33,"r":4,"s":1,"t":1},{"mka":10,"kind":"teach","items":[{"t":"SK 1.6 SEMPURNAKAN TAJWIDMU"},{"t":"KHATAM AL-QURAN"},{"t":"SK 5.1 HIJRAH"},{"t":"SK 7.1 MEMBINA, MENULIS TEKS MENGIKUT TEMA"}],"bt":33,"r":4,"s":1,"t":1},{"mka":11,"kind":"teach","items":[{"t":"SK 1.6 SEMPURNAKAN TAJWIDMU"},{"t":"KHATAM AL-QURAN"},{"t":"SK 6.1 HARGAI NIKMAT KENDERAAN"},{"t":"SK 7.1 MEMBINA, MENULIS TEKS MENGIKUT TEMA"}],"bt":33,"r":4,"s":1,"t":1},{"mka":12,"kind":"teach","items":[{"t":"SK 1.6 SEMPURNAKAN TAJWIDMU"},{"t":"KHATAM AL-QURAN"},{"t":"SK 6.1 HARGAI NIKMAT KENDERAAN"},{"t":"SK 7.1 MEMBINA, MENULIS TEKS MENGIKUT TEMA"}],"bt":33,"r":4,"s":1,"t":1},{"mka":13,"kind":"teach","items":[{"t":"SK 1.6 SEMPURNAKAN TAJWIDMU"},{"t":"KHATAM AL-QURAN"},{"t":"SK 6.1 HARGAI NIKMAT KENDERAAN"},{"t":"SK 7.1 MEMBINA, MENULIS TEKS MENGIKUT TEMA"}],"bt":33,"r":4,"s":1,"t":1},{"mka":14,"kind":"teach","items":[{"t":"SK 1.6 SEMPURNAKAN TAJWIDMU"},{"t":"KHATAM AL-QURAN"},{"t":"SK 3.2 BERIMAN DENGAN HARI AKHIRAT"},{"t":"SK 7.1 MEMBINA, MENULIS TEKS MENGIKUT TEMA"}],"bt":33,"r":4,"s":1,"t":1},{"mka":15,"kind":"teach","items":[{"t":"SK 1.6 SEMPURNAKAN TAJWIDMU"},{"t":"KHATAM AL-QURAN"},{"t":"SK 3.2 BERIMAN DENGAN HARI AKHIRAT"},{"t":"SK 7.1 MEMBINA, MENULIS TEKS MENGIKUT TEMA"}],"bt":33,"r":4,"s":1,"t":1},{"mka":16,"kind":"upsa","title":"UPSA"},{"mka":17,"kind":"teach","items":[{"t":"SK 1.5  SURAH AL-ASR"},{"t":"KHATAM AL-QURAN"},{"t":"SK 4.2 SOLAT BERJEMAAH"},{"t":"SK 7.1 MEMBINA, MENULIS TEKS MENGIKUT TEMA"}],"bt":33,"r":4,"s":1,"t":1},{"mka":18,"kind":"teach","items":[{"t":"SK 1.5  SURAH AL-ASR"},{"t":"KHATAM AL-QURAN"},{"t":"SK 4.2 SOLAT BERJEMAAH"},{"t":"SK 7.1 MEMBINA, MENULIS TEKS MENGIKUT TEMA"}],"bt":33,"r":4,"s":1,"t":1},{"mka":19,"kind":"teach","items":[{"t":"SK 1.5  SURAH AL-ASR"},{"t":"KHATAM AL-QURAN"},{"t":"SK 5.2 ITQAN"},{"t":"SK 7.1 MEMBINA, MENULIS TEKS MENGIKUT TEMA"}],"bt":33,"r":4,"s":1,"t":1},{"mka":20,"kind":"teach","items":[{"t":"SK 1.5  SURAH AL-ASR"},{"t":"KHATAM AL-QURAN"},{"t":"SK 5.2 ITQAN"},{"t":"SK 7.1 MEMBINA, MENULIS TEKS MENGIKUT TEMA"}],"bt":33,"r":4,"s":1,"t":1},{"mka":21,"kind":"teach","items":[{"t":"SK 1.1 BACAAN SURAH AL-QADR"},{"t":"KHATAM AL-QURAN"},{"t":"SK 5.2 ITQAN"},{"t":"SK 7.1 MEMBINA, MENULIS TEKS MENGIKUT TEMA"}],"bt":33,"r":4,"s":1,"t":1},{"mka":22,"kind":"teach","items":[{"t":"SK 1.1 BACAAN SURAH AL-QADR"},{"t":"KHATAM AL-QURAN"},{"t":"SK 6.2 BERJUAL BELI"},{"t":"SK 7.1 MEMBINA, MENULIS TEKS MENGIKUT TEMA"}],"bt":33,"r":4,"s":1,"t":1},{"mka":23,"kind":"teach","items":[{"t":"SK 1.6 SEMPURNAKAN TAJWIDMU"},{"t":"KHATAM AL-QURAN"},{"t":"SK 6.2 BERJUAL BELI"},{"t":"SK 7.1 MEMBINA, MENULIS TEKS MENGIKUT TEMA"}],"bt":33,"r":4,"s":1,"t":1},{"mka":24,"kind":"teach","items":[{"t":"SK 1.6 SEMPURNAKAN TAJWIDMU"},{"t":"KHATAM AL-QURAN"},{"t":"SK 6.2 BERJUAL BELI"},{"t":"SK 7.1 MEMBINA, MENULIS TEKS MENGIKUT TEMA"}],"bt":33,"r":4,"s":1,"t":1},{"mka":25,"kind":"teach","items":[{"t":"SK 1.2 SURAH AD-DHUHA"},{"t":"KHATAM AL-QURAN"},{"t":"SK 2.1 MASYARAKAT MAJU TANPA RASUAH"},{"t":"SK 7.2 MENULIS KHAT RIK'AH"}],"bt":33,"r":4,"s":1,"t":1},{"mka":26,"kind":"teach","items":[{"t":"SK 1.2 SURAH AD-DHUHA"},{"t":"KHATAM AL-QURAN"},{"t":"SK 2.1 MASYARAKAT MAJU TANPA RASUAH"},{"t":"SK 7.2 MENULIS KHAT RIK'AH"}],"bt":33,"r":4,"s":1,"t":1},{"mka":27,"kind":"teach","items":[{"t":"SK 1.4SURAH AD-DHUHA"},{"t":"KHATAM AL-QURAN"},{"t":"SK 2.1 MASYARAKAT MAJU TANPA RASUAH"},{"t":"SK 7.2 MENULIS KHAT RIK'AH"}],"bt":33,"r":4,"s":1,"t":1},{"mka":28,"kind":"teach","items":[{"t":"SK 1.6 SEMPURNAKAN TAJWIDMU"},{"t":"KHATAM AL-QURAN"},{"t":"SK 3.3 SYIRIK MEROSAKKAN AKIDAH"},{"t":"SK 7.2 MENULIS KHAT RIK'AH"}],"bt":33,"r":4,"s":1,"t":1},{"mka":29,"kind":"teach","items":[{"t":"SK 1.6 SEMPURNAKAN TAJWIDMU"},{"t":"KHATAM AL-QURAN"},{"t":"SK 4.3 JUMAAT PENUH BERKAT"},{"t":"SK 7.2 MENULIS KHAT RIK'AH"}],"bt":33,"r":4,"s":1,"t":1},{"mka":30,"kind":"teach","items":[{"t":"SK 1.6 SEMPURNAKAN TAJWIDMU"},{"t":"KHATAM AL-QURAN"},{"t":"SK 4.3 JUMAAT PENUH BERKAT"},{"t":"SK 7.2 MENULIS KHAT RIK'AH"}],"bt":33,"r":4,"s":1,"t":1},{"mka":31,"kind":"teach","items":[{"t":"SK 1.6 SEMPURNAKAN TAJWIDMU"},{"t":"KHATAM AL-QURAN"},{"t":"SK 4.3 JUMAAT PENUH BERKAT"},{"t":"SK 7.2 MENULIS KHAT RIK'AH"}],"bt":33,"r":4,"s":1,"t":1},{"mka":32,"kind":"teach","items":[{"t":"SK 1.6 SEMPURNAKAN TAJWIDMU"},{"t":"KHATAM AL-QURAN"},{"t":"SK 4.3 JUMAAT PENUH BERKAT"},{"t":"SK 7.2 MENULIS KHAT RIK'AH"}],"bt":33,"r":4,"s":1,"t":1},{"mka":33,"kind":"teach","items":[{"t":"SK 1.6 SEMPURNAKAN TAJWIDMU"},{"t":"KHATAM AL-QURAN"},{"t":"SK 5.3 NABI MUHAMMAD PEMIMPIN AGUNG"},{"t":"SK 7.2 MENULIS KHAT RIK'AH"}],"bt":33,"r":4,"s":1,"t":1},{"mka":34,"kind":"teach","items":[{"t":"SK 1.5 KEFAHAMAN SURAH AL-ASR"},{"t":"KHATAM AL-QURAN"},{"t":"S SK 6.3 BIJAK BERKOMUNIKASI"},{"t":"SK 7.2 MENULIS KHAT RIK'AH"}],"bt":33,"r":4,"s":1,"t":1},{"mka":35,"kind":"uasa","title":"UASA"},{"mka":36,"kind":"teach","items":[{"t":"SK 1.5 KEFAHAMAN SURAH AL-ASR"},{"t":"KHATAM AL-QURAN"},{"t":"SK 3.4 BAHAYA SIHIR"},{"t":"SK 7.2 MENULIS KHAT RIK'AH"}],"bt":33,"r":4,"s":1,"t":1},{"mka":37,"kind":"teach","items":[{"t":"SK 1.3 HAFAZAN SURAH AL-QADR"},{"t":"KHATAM AL-QURAN"},{"t":"SK 3.4 BAHAYA SIHIR"},{"t":"SK 7.2 MENULIS KHAT RIK'AH"}],"bt":33,"r":4,"s":1,"t":1},{"mka":38,"kind":"teach","items":[{"t":"SK 1.3 HAFAZAN SURAH AL-QADR"},{"t":"KHATAM AL-QURAN"},{"t":"SK 3.4 BAHAYA SIHIR"},{"t":"SK 7.2 MENULIS KHAT RIK'AH"}],"bt":33,"r":4,"s":1,"t":1},{"mka":39,"kind":"teach","items":[{"t":"SK 1.4 HAFAZAN SURAH ATTIN"},{"t":"KHATAM AL-QURAN"},{"t":"SK 4.4 DUA HARI RAYA YANG MULIA"},{"t":"SK 7.2 MENULIS KHAT RIK'AH"}],"bt":33,"r":4,"s":1,"t":1},{"mka":40,"kind":"admin","title":"PELAPORAN PBD 2"},{"mka":41,"kind":"admin","title":"PENGURUSAN DATA"},{"mka":42,"kind":"admin","title":"BUDAYA TUTUP SEKOLAH"}],"source":"KONTRAK LATIHAN TAHUN 5_.xlsx","mapping":"fail","kerapan":3,"bilwaktu":6},"2":{"year":2,"mode":"bidang","guru":"SITI NABILAH BINTI AB WAHAB","kelas":"AMANAH","weeks":[{"mka":1,"kind":"open","title":"Pengurusan Persekolahan"},{"mka":2,"kind":"teach","items":[{"t":"Sifat-sifat Allah","set":3,"q":{"ulum":15}},{"t":"Perkataan 3 Suku Kata atau Lebih","set":1,"q":{"jawi":5}}]},{"mka":3,"kind":"teach","items":[{"t":"Sifat-sifat Allah","set":3,"q":{"ulum":12}},{"t":"Perkataan 3 Suku Kata atau Lebih","set":1,"q":{"jawi":5}}]},{"mka":4,"kind":"teach","items":[{"t":"Beristinja' Selain Daripada Air","set":3,"q":{"ulum":16}},{"t":"Perkataan 3 Suku Kata atau Lebih","set":1,"q":{"jawi":5}}]},{"mka":5,"kind":"teach","items":[{"t":"Beristinja' Selain Daripada Air","set":3,"q":{"ulum":16}},{"t":"Perkataan 3 Suku Kata atau Lebih","set":1,"q":{"jawi":5}}]},{"mka":6,"kind":"teach","items":[{"t":"Sesuci Hati Kekasih Allah","set":3,"q":{"ulum":14}},{"t":"Perkataan 3 Suku Kata atau Lebih","set":1,"q":{"jawi":5}}]},{"mka":7,"kind":"teach","items":[{"t":"Sesuci Hati Kekasih Allah","set":3,"q":{"ulum":11}},{"t":"Perkataan 3 Suku Kata atau Lebih","set":1,"q":{"jawi":5}}]},{"mka":8,"kind":"teach","items":[{"t":"Berkati Rezekiku","set":3,"q":{"adab":20}},{"t":"Perkataan 3 Suku Kata atau Lebih","set":1,"q":{"jawi":5}}]},{"mka":9,"kind":"teach","items":[{"t":"Bacaan Surah An-Nas","set":6,"q":{"quran":20}},{"t":"Berkati Rezekiku","set":3,"q":{"adab":12}},{"t":"Perkataan 3 Suku Kata atau Lebih","set":1,"q":{"jawi":5}}]},{"mka":10,"kind":"teach","items":[{"t":"Hafazan Surah An-Nas","set":6,"q":{"quran":32}},{"t":"Tuhanku Al-Ahad dan As-Somad","set":3,"q":{"ulum":11}},{"t":"Perkataan 3 Suku Kata atau Lebih","set":1,"q":{"jawi":5}},{"t":"Tajwid :  Mad Asli","set":6,"q":{"quran":33}}]},{"mka":11,"kind":"teach","items":[{"t":"Tuhanku Al-Ahad dan As-Somad","set":3,"q":{"ulum":10}},{"t":"Perkataan 3 Suku Kata atau Lebih","set":1,"q":{"jawi":5}}]},{"mka":12,"kind":"teach","items":[{"t":"Solatku Sempurna","set":3,"q":{"ulum":17}},{"t":"Perkataan 3 Suku Kata atau Lebih","set":1,"q":{"jawi":5}}]},{"mka":13,"kind":"teach","items":[{"t":"Solatku Sempurna","set":3,"q":{"ulum":13}},{"t":"Perkataan 3 Suku Kata atau Lebih","set":1,"q":{"jawi":5}}]},{"mka":14,"kind":"teach","items":[{"t":"Nabi Muhammad Al-Amin","set":3,"q":{"ulum":16}},{"t":"Perkataan 3 Suku Kata atau Lebih","set":1,"q":{"jawi":5}}]},{"mka":15,"kind":"teach","items":[{"t":"Nabi Muhammad Al-Amin","set":3,"q":{"ulum":20}},{"t":"Rangkai Kata","set":1,"q":{"jawi":5}}]},{"mka":16,"kind":"teach","items":[{"t":"Bacaan Surah Al-Falaq","set":6,"q":{"quran":33}},{"t":"Indahnya Persahabatan","set":3,"q":{"adab":13}},{"t":"Perkataan 3 Suku Kata atau Lebih","set":1,"q":{"jawi":5}}]},{"mka":17,"kind":"teach","items":[{"t":"Hafazan Surah Al-Falaq","set":6,"q":{"quran":32}},{"t":"Indahnya Persahabatan","set":3,"q":{"adab":14}},{"t":"Perkataan 3 Suku Kata atau Lebih","set":1,"q":{"jawi":5}}]},{"mka":18,"kind":"teach","items":[{"t":"Tajwid :  Mim dan Nun Syaddah","set":6,"q":{"quran":31}},{"t":"Malaikat Yang Setia","set":3,"q":{"ulum":17}},{"t":"Rangkai Kata","set":1,"q":{"jawi":5}}]},{"mka":19,"kind":"teach","items":[{"t":"Malaikat Yang Setia","set":3,"q":{"ulum":14}},{"t":"Rangkai Kata","set":1,"q":{"jawi":5}}]},{"mka":20,"kind":"teach","items":[{"t":"Bacaan Wajib Solatku","set":2,"q":{"ulum":8}},{"t":"Rangkai Kata","set":1,"q":{"jawi":5}}]},{"mka":21,"kind":"teach","items":[{"t":"Bacaan Wajib Solatku","set":2,"q":{"ulum":10}},{"t":"Rangkai Kata","set":1,"q":{"jawi":5}}]},{"mka":22,"kind":"teach","items":[{"t":"Bacaan Wajib Solatku","set":2,"q":{"ulum":11}},{"t":"Rangkai Kata","set":1,"q":{"jawi":5}}]},{"mka":23,"kind":"teach","items":[{"t":"Nabi Muhammad Sahabat Sejati","set":3,"q":{"ulum":17}},{"t":"Menulis Ayat dan Teks Pendek","set":1,"q":{"jawi":5}}]},{"mka":24,"kind":"teach","items":[{"t":"Nabi Muhammad Sahabat Sejati","set":3,"q":{"ulum":16}},{"t":"Menulis Ayat dan Teks Pendek","set":1,"q":{"jawi":5}}]},{"mka":25,"kind":"teach","items":[{"t":"Perkenankan Doaku","set":3,"q":{"ulum":14}},{"t":"Rangkai Kata","set":1,"q":{"jawi":5}}]},{"mka":26,"kind":"teach","items":[{"t":"Perkenankan Doaku","set":3,"q":{"ulum":15}},{"t":"Menulis Ayat dan Teks Pendek","set":1,"q":{"jawi":5}}]},{"mka":27,"kind":"teach","items":[{"t":"Bacaaan Sunat Solatku","set":3,"q":{"ulum":14}},{"t":"Menulis Ayat dan Teks Pendek","set":1,"q":{"jawi":5}}]},{"mka":28,"kind":"teach","items":[{"t":"Bacaan Sunat Solatku","set":3,"q":{"ulum":18}},{"t":"Menulis Ayat dan Teks Pendek","set":1,"q":{"jawi":5}}]},{"mka":29,"kind":"teach","items":[{"t":"Kekasihku Rasulullah","set":3,"q":{"adab":17}},{"t":"Menulis Ayat dan Teks Pendek","set":1,"q":{"jawi":5}}]},{"mka":30,"kind":"teach","items":[{"t":"Kekasihku Rasulullah","set":4,"q":{"adab":14}},{"t":"Menulis Ayat dan Teks Pendek","set":1,"q":{"jawi":5}}]},{"mka":31,"kind":"teach","items":[{"t":"Menulis Ayat dan Teks Pendek","set":1,"q":{"jawi":5}}]},{"mka":32,"kind":"teach","items":[{"t":"Menulis Ayat dan Teks Pendek","set":1,"q":{"jawi":5}}]},{"mka":33,"kind":"teach","items":[{"t":"Menulis Ayat dan Teks Pendek","set":1,"q":{"jawi":5}}]},{"mka":34,"kind":"teach","items":[{"t":"Menulis Ayat dan Teks Pendek","set":1,"q":{"jawi":5}}]},{"mka":35,"kind":"teach","items":[{"t":"Menulis Ayat dan Teks Pendek","set":1,"q":{"jawi":5}}]},{"mka":36,"kind":"teach","items":[{"t":"Menulis Ayat dan Teks Pendek","set":1,"q":{"jawi":5}}]},{"mka":37,"kind":"teach","items":[{"t":"Menulis Ayat dan Teks Pendek","set":1,"q":{"jawi":5}}]},{"mka":38,"kind":"teach","items":[{"t":"Menulis Ayat dan Teks Pendek","set":1,"q":{"jawi":5}}]},{"mka":39,"kind":"teach","items":[{"t":"Menulis Ayat dan Teks Pendek","set":1,"q":{"jawi":5}}]},{"mka":40,"kind":"teach","items":[{"t":"Amali Solat","q":{}}]},{"mka":41,"kind":"teach","items":[{"t":"Amali Solat","q":{}}]},{"mka":42,"kind":"teach","items":[{"t":"Amali Solat","q":{}}]}],"source":"KONTRAK LATIHAN TAHUN 2.xlsx","mapping":"fail","note":"Jumlah set dan soalan berdasarkan Buku Aktiviti Pendidikan Islam (nota fail asal)."},"3":{"year":3,"mode":"bidang","guru":"AZLINA FAZIERA BINTI AHMAD","kelas":"AMANAH","weeks":[{"mka":1,"kind":"open","title":"Minggu Pertama Persekolahan"},{"mka":2,"kind":"teach","items":[{"t":"Tilawah : Bacaan Surah Al-Kafirun","q":{"quran":20}},{"t":"Aqidah : Nama Allah Al-Alim & Al-Hakim","q":{"ulum":6}},{"t":"Jawi : Perkataan Berimbuhan Awalan","q":{"jawi":5}}]},{"mka":3,"kind":"teach","items":[{"t":"Tilawah : Bacaan Surah Al-Kafirun","q":{"quran":15}},{"t":"Aqidah : Nama Allah Al-Alim & Al-Hakim","q":{"ulum":10}},{"t":"Jawi : Perkataan Berimbuhan Awalan","q":{"jawi":5}}]},{"mka":4,"kind":"teach","items":[{"t":"Hafazan Surah Al-Kafirun","q":{"quran":19}},{"t":"Aqidah : Nama Allah Al-Alim & Al-Hakim","q":{"ulum":7}},{"t":"Jawi : Perkataan Berimbuhan Awalan","q":{"jawi":5}}]},{"mka":5,"kind":"teach","items":[{"t":"Hafazan Surah Al-Kafirun","q":{"quran":16}},{"t":"Ibadat : Konsep Bersuci Daripada Hadas Besar","q":{"ulum":4}},{"t":"Jawi : Perkataan Berimbuhan Awalan","q":{"jawi":5}}]},{"mka":6,"kind":"teach","items":[{"t":"Tajwid : Izhar Halqi","q":{"quran":6}},{"t":"Ibadat : Konsep Bersuci Daripada Hadas Besar","q":{"ulum":15}},{"t":"Jawi : Perkataan Berimbuhan Awalan","q":{"jawi":5}}]},{"mka":7,"kind":"teach","items":[{"t":"Tajwid : Izhar Halqi","q":{"quran":5}},{"t":"Ibadat : Konsep Bersuci Daripada Hadas Besar","q":{"ulum":12}},{"t":"Jawi : Perkataan Berimbuhan Awalan","q":{"jawi":5}}]},{"mka":8,"kind":"teach","items":[{"t":"Tajwid : Izhar Halqi","q":{"quran":5}},{"t":"Sirah : Peristiwa Penerimaan wahyu","q":{"ulum":15}},{"t":"Jawi : Perkataan Berimbuhan Awalan","q":{"jawi":5}}]},{"mka":9,"kind":"teach","items":[{"t":"Tajwid : Idgham Bila Ghunnah","q":{"quran":5}},{"t":"Sirah : Peristiwa Penerimaan wahyu","q":{"ulum":16}},{"t":"Jawi : Perkataan Berimbuhan Awalan","q":{"jawi":5}}]},{"mka":10,"kind":"teach","items":[{"t":"Tajwid : Idgham Bila Ghunnah","q":{"quran":5}},{"t":"Sirah : Peristiwa Penerimaan wahyu","q":{"ulum":10}},{"t":"Jawi : Perkataan Berimbuhan Awalan","q":{"jawi":5}}]},{"mka":11,"kind":"teach","items":[{"t":"Tajwid : Idgham Bila Ghunnah","q":{"quran":5}},{"t":"Adab : Adab Tidur","q":{"adab":8}},{"t":"Jawi : Perkataan Berimbuhan Awalan","q":{}}]},{"mka":12,"kind":"teach","items":[{"t":"Tajwid : Idgham Maal Ghunnah","q":{"quran":5}},{"t":"Adab : Adab Tidur","q":{"adab":10}},{"t":"Jawi : Perkataan Berimbuhan Awalan","q":{"jawi":5}}]},{"mka":13,"kind":"teach","items":[{"t":"Tajwid : Idgham Maal Ghunnah","q":{"quran":5}},{"t":"Adab : Adab Tidur","q":{"adab":4}},{"t":"Jawi : Perkataan Berimbuhan Awalan","q":{"jawi":5}}]},{"mka":14,"kind":"teach","items":[{"t":"Tajwid : Idgham Maal Ghunnah","q":{"quran":5}},{"t":"Ibadat : Perkara Yang Membatalkan Solat","q":{"ulum":10}},{"t":"Jawi : Perkataan Berimbuhan Akhiran","q":{"jawi":5}}]},{"mka":15,"kind":"teach","items":[{"t":"Al-Quran : Pengenalan Surah Al-Fatihah","q":{"quran":6}},{"t":"Ibadat : Perkara Yang Membatalkan Solat","q":{"ulum":5}},{"t":"Jawi : Perkataan Berimbuhan Akhiran","q":{"jawi":5}}]},{"mka":16,"kind":"upsa","title":"UPSA"},{"mka":17,"kind":"teach","items":[{"t":"Al-Quran : Pengenalan Surah Al-Fatihah","q":{"quran":6}},{"t":"Ibadat : Perkara Yang Membatalkan Solat","q":{"ulum":15}},{"t":"Jawi : Perkataan Berimbuhan Akhiran","q":{"jawi":5}}]},{"mka":18,"kind":"teach","items":[{"t":"Al-Quran : Pengenalan Surah Al-Fatihah","q":{"quran":8}},{"t":"Sirah : Sifat Tabligh Nabi Muhammad saw","q":{"ulum":11}},{"t":"Jawi : Perkataan Berimbuhan Akhiran","q":{"jawi":5}}]},{"mka":19,"kind":"teach","items":[{"t":"Al-Quran : Pengenalan Surah Al-Fatihah","q":{}},{"t":"Sirah : Sifat Tabligh Nabi Muhammad saw","q":{"ulum":10}},{"t":"Jawi : Perkataan Berimbuhan Akhiran","q":{"jawi":5}}]},{"mka":20,"kind":"teach","items":[{"t":"Al-Quran : Hafazan Surah Al-Kafirun","q":{}},{"t":"Sirah : Sifat Tabligh Nabi Muhammad saw","q":{"ulum":7}},{"t":"Jawi : Perkataan Berimbuhan Akhiran","q":{"jawi":5}}]},{"mka":21,"kind":"teach","items":[{"t":"Al-Quran : Hafazan Surah Al-Kafirun","q":{}},{"t":"Hadis","q":{"hadis":14}},{"t":"Jawi : Perkataan Berimbuhan Akhiran","q":{"jawi":5}}]},{"mka":22,"kind":"teach","items":[{"t":"Al-Quran : Izhar Halqi, Idgham","q":{"quran":5}},{"t":"Hadis","q":{"hadis":11}},{"t":"Jawi : Perkataan Berimbuhan Akhiran","q":{"jawi":5}}]},{"mka":23,"kind":"teach","items":[{"t":"Al-Quran : Bacaan Surah Al-Asr","q":{}},{"t":"Hadis","q":{"hadis":13}},{"t":"Jawi : Perkataan Berimbuhan Apitan","q":{"jawi":5}}]},{"mka":24,"kind":"teach","items":[{"t":"Al-Quran : Bacaan Surah Al-Asr","q":{"quran":17}},{"t":"Adab: Adab Menuntut Ilmu","q":{"adab":10}},{"t":"Jawi : Perkataan Berimbuhan Apitan","q":{"jawi":5}}]},{"mka":25,"kind":"teach","items":[{"t":"Al-Quran : Hafazan Surah Al-Asr","q":{"quran":14}},{"t":"Adab: Adab Menuntut Ilmu","q":{"adab":16}},{"t":"Jawi : Perkataan Berimbuhan Apitan","q":{"jawi":5}}]},{"mka":26,"kind":"teach","items":[{"t":"Al-Quran : Hafazan Surah Al-Asr","q":{"quran":19}},{"t":"Adab: Adab Menuntut Ilmu","q":{"adab":16}},{"t":"Jawi : Perkataan Berimbuhan Apitan","q":{"jawi":5}}]},{"mka":27,"kind":"teach","items":[{"t":"Tajwid : Ihfa' Haqiqi","q":{"quran":5}},{"t":"Aqidah : Beriman Dengan Kitab","q":{"ulum":11}},{"t":"Jawi : Perkataan Berimbuhan Apitan","q":{"jawi":5}}]},{"mka":28,"kind":"teach","items":[{"t":"Tajwid : Ihfa' Haqiqi","q":{"quran":5}},{"t":"Aqidah : Beriman Dengan Kitab","q":{"ulum":20}},{"t":"Jawi : Perkataan Berimbuhan Apitan","q":{"jawi":5}}]},{"mka":29,"kind":"teach","items":[{"t":"Tajwid : Ihfa' Haqiqi","q":{"quran":5}},{"t":"Aqidah : Beriman Dengan Kitab","q":{"ulum":16}},{"t":"Jawi : Perkataan Berimbuhan Apitan","q":{"jawi":5}}]},{"mka":30,"kind":"teach","items":[{"t":"Tajwid : Iqlab","q":{"quran":5}},{"t":"Ibadat : Sunat Ab'ad & Sunat Haiat","q":{"ulum":10}},{"t":"Jawi : Perkataan Berimbuhan Apitan","q":{"jawi":5}}]},{"mka":31,"kind":"teach","items":[{"t":"Tajwid : Iqlab","q":{"quran":5}},{"t":"Ibadat : Sunat Ab'ad & Sunat Haiat","q":{"ulum":16}},{"t":"Jawi : Perkataan Berimbuhan Apitan","q":{"jawi":5}}]},{"mka":32,"kind":"teach","items":[{"t":"Tajwid : Iqlab","q":{"quran":5}},{"t":"Ibadat : Sunat Ab'ad & Sunat Haiat","q":{"ulum":16}},{"t":"Jawi : Perkataan Berimbuhan Apitan","q":{"jawi":5}}]},{"mka":33,"kind":"teach","items":[{"t":"Al-Quran : Pengenalan Surah Al-Fatihah","q":{"quran":5}},{"t":"Sirah : Keperibadian Nabi Muhammad saw","q":{"ulum":10}},{"t":"Jawi : Perkataan Berimbuhan Apitan","q":{"jawi":5}}]},{"mka":34,"kind":"teach","items":[{"t":"Al-Quran : Pengenalan Surah Al-Fatihah","q":{"quran":3}},{"t":"Sirah : Keperibadian Nabi Muhammad saw","q":{"ulum":12}},{"t":"Jawi : Perkataan Berimbuhan Apitan","q":{}}]},{"mka":35,"kind":"uasa","title":"UASA"},{"mka":36,"kind":"teach","items":[{"t":"Al-Quran : Pengenalan Surah Al-Fatihah","q":{"quran":5}},{"t":"Sirah : Keperibadian Nabi Muhammad saw","q":{"ulum":15}},{"t":"Jawi : Perkataan Berimbuhan Apitan","q":{"jawi":5}}]},{"mka":37,"kind":"teach","items":[{"t":"Al-Quran : Membaca & Menghafaz Surah Al-Kafirun","q":{}},{"t":"Adab : Adab Bersyukur","q":{"adab":23}},{"t":"Jawi : Perkataan Berimbuhan Apitan","q":{"jawi":5}}]},{"mka":38,"kind":"teach","items":[{"t":"Al-Quran : Membaca & Menghafaz Surah Al-Asr","q":{}},{"t":"Adab : Adab Bersyukur","q":{"adab":23}},{"t":"Jawi : Perkataan Berimbuhan Apitan","q":{"jawi":5}}]},{"mka":39,"kind":"teach","items":[{"t":"Tajwid : Ulangan","q":{}},{"t":"Sirah : Pengertian Sunnah","q":{}},{"t":"Jawi : Perkataan Berimbuhan Apitan","q":{}}]},{"mka":40,"kind":"teach","items":[{"t":"Tajwid : Ulangan","q":{}},{"t":"Sirah : Pengertian Sunnah","q":{}},{"t":"Jawi : Perkataan Berimbuhan Apitan","q":{}}]},{"mka":41,"kind":"teach","items":[{"t":"Al-Quran : Khatam Al-Quran","q":{}}]},{"mka":42,"kind":"teach","items":[{"t":"Al-Quran : Khatam Al-Quran","q":{}}]}],"source":"KONTRAK LATIHAN TAHUN 3 2026.xlsx","mapping":"fail","kerapan":3,"bilwaktu":6},"1":{"year":1,"mode":"sk","guru":"","kelas":"","weeks":[{"mka":1,"kind":"open","title":"Minggu Suai Kenal / Pengurusan Persekolahan"},{"mka":2,"kind":"teach","items":[{"b":"Al-Quran","t":"1.1  Membaca huruf hijaiyyah dengan betul dan bertajwid","cont":false},{"b":"Akidah","t":"3.1  Memahami dan mengamalkan Rukun Iman","cont":false},{"b":"Jawi","t":"7.1  Mengenal dan menulis huruf Jawi tunggal","cont":false}],"r":10,"s":5,"t":5,"rows":[{"r":4,"s":2,"tt":2},{"r":4,"s":2,"tt":2},{"r":2,"s":1,"tt":1}]},{"mka":3,"kind":"teach","items":[{"b":"Al-Quran","t":"1.1  Membaca huruf hijaiyyah dengan betul dan bertajwid","cont":true},{"b":"Akidah","t":"3.1  Memahami dan mengamalkan Rukun Iman","cont":true},{"b":"Jawi","t":"7.1  Mengenal dan menulis huruf Jawi tunggal","cont":true}],"r":8,"s":5,"t":3,"rows":[{"r":3,"s":2,"tt":1},{"r":3,"s":2,"tt":1},{"r":2,"s":1,"tt":1}]},{"mka":4,"kind":"teach","items":[{"b":"Al-Quran","t":"1.1  Membaca huruf hijaiyyah dengan betul dan bertajwid","cont":true},{"b":"Akidah","t":"3.1  Memahami dan mengamalkan Rukun Iman","cont":true},{"b":"Jawi","t":"7.1  Mengenal dan menulis huruf Jawi tunggal","cont":true}],"r":8,"s":5,"t":3,"rows":[{"r":3,"s":2,"tt":1},{"r":3,"s":2,"tt":1},{"r":2,"s":1,"tt":1}]},{"mka":5,"kind":"teach","items":[{"b":"Al-Quran","t":"1.2  Membaca suku kata dan perkataan berbaris dengan betul","cont":false},{"b":"Akidah","t":"3.2  Memahami dan mengamalkan Rukun Islam","cont":false},{"b":"Jawi","t":"7.1  Mengenal dan menulis huruf Jawi tunggal","cont":true}],"r":10,"s":5,"t":5,"rows":[{"r":4,"s":2,"tt":2},{"r":4,"s":2,"tt":2},{"r":2,"s":1,"tt":1}]},{"mka":6,"kind":"teach","items":[{"b":"Al-Quran","t":"1.2  Membaca suku kata dan perkataan berbaris dengan betul","cont":true},{"b":"Akidah","t":"3.2  Memahami dan mengamalkan Rukun Islam","cont":true},{"b":"Jawi","t":"7.1  Mengenal dan menulis huruf Jawi tunggal","cont":true}],"r":7,"s":5,"t":2,"rows":[{"r":3,"s":2,"tt":1},{"r":3,"s":2,"tt":1},{"r":1,"s":1,"tt":0}]},{"mka":7,"kind":"teach","items":[{"b":"Al-Quran","t":"1.2  Membaca suku kata dan perkataan berbaris dengan betul","cont":true},{"b":"Akidah","t":"3.2  Memahami dan mengamalkan Rukun Islam","cont":true},{"b":"Jawi","t":"7.1  Mengenal dan menulis huruf Jawi tunggal","cont":true}],"r":7,"s":5,"t":2,"rows":[{"r":3,"s":2,"tt":1},{"r":3,"s":2,"tt":1},{"r":1,"s":1,"tt":0}]},{"mka":8,"kind":"teach","items":[{"b":"Al-Quran","t":"1.3  Membaca potongan ayat yang mengandungi tanwin dengan betul","cont":false},{"b":"Akidah","t":"3.3  Memahami dan mengamalkan nama Allah Ar-Rahman dan Ar-Rahim","cont":false},{"b":"Jawi","t":"7.2  Membaca dan menulis suku kata terbuka Jawi","cont":false}],"r":10,"s":5,"t":5,"rows":[{"r":4,"s":2,"tt":2},{"r":4,"s":2,"tt":2},{"r":2,"s":1,"tt":1}]},{"mka":9,"kind":"teach","items":[{"b":"Al-Quran","t":"1.3  Membaca potongan ayat yang mengandungi tanwin dengan betul","cont":true},{"b":"Akidah","t":"3.3  Memahami dan mengamalkan nama Allah Ar-Rahman dan Ar-Rahim","cont":true},{"b":"Jawi","t":"7.2  Membaca dan menulis suku kata terbuka Jawi","cont":true}],"r":8,"s":5,"t":3,"rows":[{"r":3,"s":2,"tt":1},{"r":3,"s":2,"tt":1},{"r":2,"s":1,"tt":1}]},{"mka":10,"kind":"teach","items":[{"b":"Al-Quran","t":"1.3  Membaca potongan ayat yang mengandungi tanwin dengan betul","cont":true},{"b":"Akidah","t":"3.3  Memahami dan mengamalkan nama Allah Ar-Rahman dan Ar-Rahim","cont":true},{"b":"Jawi","t":"7.2  Membaca dan menulis suku kata terbuka Jawi","cont":true}],"r":8,"s":5,"t":3,"rows":[{"r":3,"s":2,"tt":1},{"r":3,"s":2,"tt":1},{"r":2,"s":1,"tt":1}]},{"mka":11,"kind":"teach","items":[{"b":"Al-Quran","t":"1.4  Membaca potongan ayat yang mengandungi izhar dengan betul","cont":false},{"b":"Ibadah","t":"4.1  Memahami jenis air mutlak dan adab menggunakannya","cont":false},{"b":"Jawi","t":"7.2  Membaca dan menulis suku kata terbuka Jawi","cont":true}],"r":10,"s":5,"t":5,"rows":[{"r":4,"s":2,"tt":2},{"r":4,"s":2,"tt":2},{"r":2,"s":1,"tt":1}]},{"mka":12,"kind":"teach","items":[{"b":"Al-Quran","t":"1.4  Membaca potongan ayat yang mengandungi izhar dengan betul","cont":true},{"b":"Ibadah","t":"4.1  Memahami jenis air mutlak dan adab menggunakannya","cont":true},{"b":"Jawi","t":"7.2  Membaca dan menulis suku kata terbuka Jawi","cont":true}],"r":7,"s":5,"t":2,"rows":[{"r":3,"s":2,"tt":1},{"r":3,"s":2,"tt":1},{"r":1,"s":1,"tt":0}]},{"mka":13,"kind":"teach","items":[{"b":"Al-Quran","t":"1.4  Membaca potongan ayat yang mengandungi izhar dengan betul","cont":true},{"b":"Ibadah","t":"4.1  Memahami jenis air mutlak dan adab menggunakannya","cont":true},{"b":"Jawi","t":"7.2  Membaca dan menulis suku kata terbuka Jawi","cont":true}],"r":7,"s":5,"t":2,"rows":[{"r":3,"s":2,"tt":1},{"r":3,"s":2,"tt":1},{"r":1,"s":1,"tt":0}]},{"mka":14,"kind":"teach","items":[{"b":"Al-Quran","t":"1.5  Membaca potongan ayat yang mengandungi lin dengan betul","cont":false},{"b":"Ibadah","t":"4.2  Memahami dan mengamalkan istinjak","cont":false},{"b":"Jawi","t":"7.3  Membaca dan menulis dua suku kata Jawi","cont":false}],"r":10,"s":5,"t":5,"rows":[{"r":4,"s":2,"tt":2},{"r":4,"s":2,"tt":2},{"r":2,"s":1,"tt":1}]},{"mka":15,"kind":"teach","items":[{"b":"Al-Quran","t":"1.5  Membaca potongan ayat yang mengandungi lin dengan betul","cont":true},{"b":"Ibadah","t":"4.2  Memahami dan mengamalkan istinjak","cont":true},{"b":"Jawi","t":"7.3  Membaca dan menulis dua suku kata Jawi","cont":true}],"r":8,"s":5,"t":3,"rows":[{"r":3,"s":2,"tt":1},{"r":3,"s":2,"tt":1},{"r":2,"s":1,"tt":1}]},{"mka":16,"kind":"upsa","title":"UPSA"},{"mka":17,"kind":"teach","items":[{"b":"Al-Quran","t":"1.5  Membaca potongan ayat yang mengandungi lin dengan betul","cont":true},{"b":"Ibadah","t":"4.2  Memahami dan mengamalkan istinjak","cont":true},{"b":"Jawi","t":"7.3  Membaca dan menulis dua suku kata Jawi","cont":true}],"r":8,"s":5,"t":3,"rows":[{"r":3,"s":2,"tt":1},{"r":3,"s":2,"tt":1},{"r":2,"s":1,"tt":1}]},{"mka":18,"kind":"teach","items":[{"b":"Al-Quran","t":"1.6  Membaca potongan ayat yang mengandungi mad asli dengan betul","cont":false},{"b":"Ibadah","t":"4.3  Memahami dan mengamalkan wuduk dengan betul","cont":false},{"b":"Jawi","t":"7.3  Membaca dan menulis dua suku kata Jawi","cont":true}],"r":10,"s":5,"t":5,"rows":[{"r":4,"s":2,"tt":2},{"r":4,"s":2,"tt":2},{"r":2,"s":1,"tt":1}]},{"mka":19,"kind":"teach","items":[{"b":"Al-Quran","t":"1.6  Membaca potongan ayat yang mengandungi mad asli dengan betul","cont":true},{"b":"Ibadah","t":"4.3  Memahami dan mengamalkan wuduk dengan betul","cont":true},{"b":"Jawi","t":"7.3  Membaca dan menulis dua suku kata Jawi","cont":true}],"r":7,"s":5,"t":2,"rows":[{"r":3,"s":2,"tt":1},{"r":3,"s":2,"tt":1},{"r":1,"s":1,"tt":0}]},{"mka":20,"kind":"teach","items":[{"b":"Al-Quran","t":"1.6  Membaca potongan ayat yang mengandungi mad asli dengan betul","cont":true},{"b":"Ibadah","t":"4.3  Memahami dan mengamalkan wuduk dengan betul","cont":true},{"b":"Jawi","t":"7.3  Membaca dan menulis dua suku kata Jawi","cont":true}],"r":7,"s":5,"t":2,"rows":[{"r":3,"s":2,"tt":1},{"r":3,"s":2,"tt":1},{"r":1,"s":1,"tt":0}]},{"mka":21,"kind":"teach","items":[{"b":"Al-Quran","t":"1.7  Membaca potongan ayat yang mengandungi iqlab dan ikhfa’ dengan betul","cont":false},{"b":"Ibadah","t":"4.4  Memahami dan mengamalkan solat fardu","cont":false},{"b":"Jawi","t":"7.4  Membaca dan menulis suku kata tertutup Jawi","cont":false}],"r":10,"s":5,"t":5,"rows":[{"r":4,"s":2,"tt":2},{"r":4,"s":2,"tt":2},{"r":2,"s":1,"tt":1}]},{"mka":22,"kind":"teach","items":[{"b":"Al-Quran","t":"1.7  Membaca potongan ayat yang mengandungi iqlab dan ikhfa’ dengan betul","cont":true},{"b":"Ibadah","t":"4.4  Memahami dan mengamalkan solat fardu","cont":true},{"b":"Jawi","t":"7.4  Membaca dan menulis suku kata tertutup Jawi","cont":true}],"r":8,"s":5,"t":3,"rows":[{"r":3,"s":2,"tt":1},{"r":3,"s":2,"tt":1},{"r":2,"s":1,"tt":1}]},{"mka":23,"kind":"teach","items":[{"b":"Al-Quran","t":"1.7  Membaca potongan ayat yang mengandungi iqlab dan ikhfa’ dengan betul","cont":true},{"b":"Ibadah","t":"4.4  Memahami dan mengamalkan solat fardu","cont":true},{"b":"Jawi","t":"7.4  Membaca dan menulis suku kata tertutup Jawi","cont":true}],"r":8,"s":5,"t":3,"rows":[{"r":3,"s":2,"tt":1},{"r":3,"s":2,"tt":1},{"r":2,"s":1,"tt":1}]},{"mka":24,"kind":"teach","items":[{"b":"Al-Quran","t":"1.8  Membaca potongan ayat yang mengandungi idgham dengan betul","cont":false},{"b":"Sirah","t":"5.1  Memahami peristiwa kelahiran Nabi Muhammad ﷺ","cont":false},{"b":"Jawi","t":"7.4  Membaca dan menulis suku kata tertutup Jawi","cont":true}],"r":11,"s":6,"t":5,"rows":[{"r":4,"s":2,"tt":2},{"r":5,"s":3,"tt":2},{"r":2,"s":1,"tt":1}]},{"mka":25,"kind":"teach","items":[{"b":"Al-Quran","t":"1.8  Membaca potongan ayat yang mengandungi idgham dengan betul","cont":true},{"b":"Sirah","t":"5.1  Memahami peristiwa kelahiran Nabi Muhammad ﷺ","cont":true},{"b":"Jawi","t":"7.4  Membaca dan menulis suku kata tertutup Jawi","cont":true}],"r":9,"s":6,"t":3,"rows":[{"r":3,"s":2,"tt":1},{"r":5,"s":3,"tt":2},{"r":1,"s":1,"tt":0}]},{"mka":26,"kind":"teach","items":[{"b":"Al-Quran","t":"1.8  Membaca potongan ayat yang mengandungi idgham dengan betul","cont":true},{"b":"Sirah","t":"5.2  Memahami sifat-sifat Nabi Muhammad ﷺ","cont":false},{"b":"Jawi","t":"7.4  Membaca dan menulis suku kata tertutup Jawi","cont":true}],"r":9,"s":6,"t":3,"rows":[{"r":3,"s":2,"tt":1},{"r":5,"s":3,"tt":2},{"r":1,"s":1,"tt":0}]},{"mka":27,"kind":"teach","items":[{"b":"Al-Quran","t":"1.9  Membaca potongan ayat yang mengandungi alif, wau dan ya dengan betul","cont":false},{"b":"Sirah","t":"5.2  Memahami sifat-sifat Nabi Muhammad ﷺ","cont":true},{"b":"Jawi","t":"7.5  Membaca dan menulis perkataan mudah Jawi","cont":false}],"r":11,"s":6,"t":5,"rows":[{"r":4,"s":2,"tt":2},{"r":5,"s":3,"tt":2},{"r":2,"s":1,"tt":1}]},{"mka":28,"kind":"teach","items":[{"b":"Al-Quran","t":"1.9  Membaca potongan ayat yang mengandungi alif, wau dan ya dengan betul","cont":true},{"b":"Sirah","t":"5.3  Memahami keperibadian Nabi Muhammad ﷺ","cont":false},{"b":"Jawi","t":"7.5  Membaca dan menulis perkataan mudah Jawi","cont":true}],"r":10,"s":6,"t":4,"rows":[{"r":3,"s":2,"tt":1},{"r":5,"s":3,"tt":2},{"r":2,"s":1,"tt":1}]},{"mka":29,"kind":"teach","items":[{"b":"Al-Quran","t":"1.9  Membaca potongan ayat yang mengandungi alif, wau dan ya dengan betul","cont":true},{"b":"Sirah","t":"5.3  Memahami keperibadian Nabi Muhammad ﷺ","cont":true},{"b":"Jawi","t":"7.5  Membaca dan menulis perkataan mudah Jawi","cont":true}],"r":10,"s":6,"t":4,"rows":[{"r":3,"s":2,"tt":1},{"r":5,"s":3,"tt":2},{"r":2,"s":1,"tt":1}]},{"mka":30,"kind":"teach","items":[{"b":"Al-Quran","t":"1.10  Membaca potongan ayat yang mengandungi syaddah mim dan nun dengan betul","cont":false},{"b":"Adab & Akhlak","t":"6.1  Mengamalkan kebersihan diri sebagai tanda ketaatan kepada Allah","cont":false},{"b":"Jawi","t":"7.5  Membaca dan menulis perkataan mudah Jawi","cont":true}],"r":12,"s":7,"t":5,"rows":[{"r":5,"s":3,"tt":2},{"r":5,"s":3,"tt":2},{"r":2,"s":1,"tt":1}]},{"mka":31,"kind":"teach","items":[{"b":"Al-Quran","t":"1.10  Membaca potongan ayat yang mengandungi syaddah mim dan nun dengan betul","cont":true},{"b":"Adab & Akhlak","t":"6.1  Mengamalkan kebersihan diri sebagai tanda ketaatan kepada Allah","cont":true},{"b":"Jawi","t":"7.5  Membaca dan menulis perkataan mudah Jawi","cont":true}],"r":11,"s":7,"t":4,"rows":[{"r":5,"s":3,"tt":2},{"r":5,"s":3,"tt":2},{"r":1,"s":1,"tt":0}]},{"mka":32,"kind":"teach","items":[{"b":"Al-Quran","t":"2.1  Membaca Surah al-Fatihah dengan betul dan menghafaz","cont":false},{"b":"Adab & Akhlak","t":"6.2  Mengamalkan adab bersosial dalam kehidupan harian","cont":false},{"b":"Jawi","t":"7.5  Membaca dan menulis perkataan mudah Jawi","cont":true}],"r":11,"s":7,"t":4,"rows":[{"r":5,"s":3,"tt":2},{"r":5,"s":3,"tt":2},{"r":1,"s":1,"tt":0}]},{"mka":33,"kind":"teach","items":[{"b":"Al-Quran","t":"2.1  Membaca Surah al-Fatihah dengan betul dan menghafaz","cont":true},{"b":"Adab & Akhlak","t":"6.2  Mengamalkan adab bersosial dalam kehidupan harian","cont":true},{"b":"Jawi","t":"7.6  Membaca dan menulis ayat pendek Jawi","cont":false}],"r":12,"s":8,"t":5,"rows":[{"r":5,"s":3,"tt":2},{"r":5,"s":3,"tt":2},{"r":2,"s":2,"tt":1}]},{"mka":34,"kind":"teach","items":[{"b":"Al-Quran","t":"2.2  Membaca Surah al-Ikhlas dengan betul dan menghafaz","cont":false},{"b":"Adab & Akhlak","t":"6.3  Mengamalkan zikir dan doa dalam kehidupan seharian","cont":false},{"b":"Jawi","t":"7.6  Membaca dan menulis ayat pendek Jawi","cont":true}],"r":12,"s":7,"t":5,"rows":[{"r":5,"s":3,"tt":2},{"r":5,"s":3,"tt":2},{"r":2,"s":1,"tt":1}]},{"mka":35,"kind":"uasa","title":"UASA"},{"mka":36,"kind":"teach","items":[{"b":"Al-Quran","t":"2.2  Membaca Surah al-Ikhlas dengan betul dan menghafaz","cont":true},{"b":"Adab & Akhlak","t":"6.3  Mengamalkan zikir dan doa dalam kehidupan seharian","cont":true},{"b":"Jawi","t":"7.6  Membaca dan menulis ayat pendek Jawi","cont":true}],"r":12,"s":7,"t":5,"rows":[{"r":5,"s":3,"tt":2},{"r":5,"s":3,"tt":2},{"r":2,"s":1,"tt":1}]},{"mka":37,"kind":"teach","items":[{"b":"Al-Quran","t":"2.3  Membaca Surah an-Nas dengan betul dan menghafaz","cont":false},{"b":"Adab & Akhlak","t":"6.4  Mengamalkan kasih sayang sesama manusia","cont":false},{"b":"Jawi","t":"7.6  Membaca dan menulis ayat pendek Jawi","cont":true}],"r":12,"s":7,"t":5,"rows":[{"r":5,"s":3,"tt":2},{"r":5,"s":3,"tt":2},{"r":2,"s":1,"tt":1}]},{"mka":38,"kind":"teach","items":[{"b":"Al-Quran","t":"2.3  Membaca Surah an-Nas dengan betul dan menghafaz","cont":true},{"b":"Adab & Akhlak","t":"6.4  Mengamalkan kasih sayang sesama manusia","cont":true},{"b":"Jawi","t":"7.6  Membaca dan menulis ayat pendek Jawi","cont":true}],"r":12,"s":7,"t":4,"rows":[{"r":5,"s":3,"tt":2},{"r":5,"s":3,"tt":2},{"r":2,"s":1,"tt":0}]},{"mka":39,"kind":"admin","title":"Minggu Ulangkaji / Penandaan"},{"mka":40,"kind":"admin","title":"Pengurusan Data"},{"mka":41,"kind":"admin","title":"Pelaporan PBD 2"},{"mka":42,"kind":"admin","title":"Budaya Tutup Sekolah"}],"source":"KONTRAK LATIHAN TAHUN 1 2026.docx","mapping":"agihan","flags":[],"totals":{"Al-Quran":{"r":130,"s":78,"t":52,"n":13},"Akidah":{"r":30,"s":18,"t":12,"n":3},"Ibadah":{"r":40,"s":24,"t":16,"n":4},"Sirah":{"r":30,"s":18,"t":12,"n":3},"Adab & Akhlak":{"r":40,"s":24,"t":16,"n":4},"Jawi":{"r":60,"s":36,"t":24,"n":6}},"sk":[{"head":"AL-QURAN","rows":[{"sk":"1.1","t":"Membaca huruf hijaiyyah dengan betul dan bertajwid","r":10,"s":6,"tt":4},{"sk":"1.2","t":"Membaca suku kata dan perkataan berbaris dengan betul","r":10,"s":6,"tt":4},{"sk":"1.3","t":"Membaca potongan ayat yang mengandungi tanwin dengan betul","r":10,"s":6,"tt":4},{"sk":"1.4","t":"Membaca potongan ayat yang mengandungi izhar dengan betul","r":10,"s":6,"tt":4},{"sk":"1.5","t":"Membaca potongan ayat yang mengandungi lin dengan betul","r":10,"s":6,"tt":4},{"sk":"1.6","t":"Membaca potongan ayat yang mengandungi mad asli dengan betul","r":10,"s":6,"tt":4},{"sk":"1.7","t":"Membaca potongan ayat yang mengandungi iqlab dan ikhfa’ dengan betul","r":10,"s":6,"tt":4},{"sk":"1.8","t":"Membaca potongan ayat yang mengandungi idgham dengan betul","r":10,"s":6,"tt":4},{"sk":"1.9","t":"Membaca potongan ayat yang mengandungi alif, wau dan ya dengan betul","r":10,"s":6,"tt":4},{"sk":"1.10","t":"Membaca potongan ayat yang mengandungi syaddah mim dan nun dengan betul","r":10,"s":6,"tt":4},{"sk":"2.1","t":"Membaca Surah al-Fatihah dengan betul dan menghafaz","r":10,"s":6,"tt":4},{"sk":"2.2","t":"Membaca Surah al-Ikhlas dengan betul dan menghafaz","r":10,"s":6,"tt":4},{"sk":"2.3","t":"Membaca Surah an-Nas dengan betul dan menghafaz","r":10,"s":6,"tt":4}]},{"head":"AKIDAH","rows":[{"sk":"3.1","t":"Memahami dan mengamalkan Rukun Iman","r":10,"s":6,"tt":4},{"sk":"3.2","t":"Memahami dan mengamalkan Rukun Islam","r":10,"s":6,"tt":4},{"sk":"3.3","t":"Memahami dan mengamalkan nama Allah Ar-Rahman dan Ar-Rahim","r":10,"s":6,"tt":4}]},{"head":"IBADAH","rows":[{"sk":"4.1","t":"Memahami jenis air mutlak dan adab menggunakannya","r":10,"s":6,"tt":4},{"sk":"4.2","t":"Memahami dan mengamalkan istinjak","r":10,"s":6,"tt":4},{"sk":"4.3","t":"Memahami dan mengamalkan wuduk dengan betul","r":10,"s":6,"tt":4},{"sk":"4.4","t":"Memahami dan mengamalkan solat fardu","r":10,"s":6,"tt":4}]},{"head":"SIRAH","rows":[{"sk":"5.1","t":"Memahami peristiwa kelahiran Nabi Muhammad ﷺ","r":10,"s":6,"tt":4},{"sk":"5.2","t":"Memahami sifat-sifat Nabi Muhammad ﷺ","r":10,"s":6,"tt":4},{"sk":"5.3","t":"Memahami keperibadian Nabi Muhammad ﷺ","r":10,"s":6,"tt":4}]},{"head":"ADAB & AKHLAK","rows":[{"sk":"6.1","t":"Mengamalkan kebersihan diri sebagai tanda ketaatan kepada Allah","r":10,"s":6,"tt":4},{"sk":"6.2","t":"Mengamalkan adab bersosial dalam kehidupan harian","r":10,"s":6,"tt":4},{"sk":"6.3","t":"Mengamalkan zikir dan doa dalam kehidupan seharian","r":10,"s":6,"tt":4},{"sk":"6.4","t":"Mengamalkan kasih sayang sesama manusia","r":10,"s":6,"tt":4}]},{"head":"JAWI","rows":[{"sk":"7.1","t":"Mengenal dan menulis huruf Jawi tunggal","r":10,"s":6,"tt":4},{"sk":"7.2","t":"Membaca dan menulis suku kata terbuka Jawi","r":10,"s":6,"tt":4},{"sk":"7.3","t":"Membaca dan menulis dua suku kata Jawi","r":10,"s":6,"tt":4},{"sk":"7.4","t":"Membaca dan menulis suku kata tertutup Jawi","r":10,"s":6,"tt":4},{"sk":"7.5","t":"Membaca dan menulis perkataan mudah Jawi","r":10,"s":6,"tt":4},{"sk":"7.6","t":"Membaca dan menulis ayat pendek Jawi","r":10,"s":6,"tt":4}]}]},"6":{"year":6,"mode":"sk","guru":"","kelas":"","weeks":[{"mka":1,"kind":"open","title":"Minggu Suai Kenal / Pengurusan Persekolahan"},{"mka":2,"kind":"teach","items":[{"b":"Al-Quran","t":"1.1  Membaca dan mengamalkan surah As-Syarh  dengan betul dan bertajwid","cont":false},{"b":"Hadis","t":"2.1  Merumus dan menghayati hadis larangan rasuah secara beradah dan istiqomah","cont":false},{"b":"Jawi","t":"7.1  Membaca, Membina dan Menulis pelbagai jenis teks berdasarkan tema","cont":false}],"r":7,"s":5,"t":4,"rows":[{"r":2,"s":2,"tt":1},{"r":4,"s":2,"tt":2},{"r":1,"s":1,"tt":1}]},{"mka":3,"kind":"teach","items":[{"b":"Al-Quran","t":"1.1  Membaca dan mengamalkan surah As-Syarh  dengan betul dan bertajwid","cont":true},{"b":"Hadis","t":"2.1  Merumus dan menghayati hadis larangan rasuah secara beradah dan istiqomah","cont":true},{"b":"Jawi","t":"7.1  Membaca, Membina dan Menulis pelbagai jenis teks berdasarkan tema","cont":true}],"r":6,"s":4,"t":3,"rows":[{"r":2,"s":1,"tt":1},{"r":3,"s":2,"tt":1},{"r":1,"s":1,"tt":1}]},{"mka":4,"kind":"teach","items":[{"b":"Al-Quran","t":"1.1  Membaca dan mengamalkan surah As-Syarh  dengan betul dan bertajwid","cont":true},{"b":"Hadis","t":"2.1  Merumus dan menghayati hadis larangan rasuah secara beradah dan istiqomah","cont":true},{"b":"Jawi","t":"7.1  Membaca, Membina dan Menulis pelbagai jenis teks berdasarkan tema","cont":true}],"r":6,"s":4,"t":3,"rows":[{"r":2,"s":1,"tt":1},{"r":3,"s":2,"tt":1},{"r":1,"s":1,"tt":1}]},{"mka":5,"kind":"teach","items":[{"b":"Al-Quran","t":"1.1  Membaca dan mengamalkan surah As-Syarh  dengan betul dan bertajwid","cont":true},{"b":"Akidah","t":"3.1  Meyakini konsep nama Allah al-hadi dan al-Adlu serta mengaplikasikannya dalam kehidupan secara beradab dan istiqomah","cont":false},{"b":"Jawi","t":"7.1  Membaca, Membina dan Menulis pelbagai jenis teks berdasarkan tema","cont":true}],"r":7,"s":4,"t":4,"rows":[{"r":2,"s":1,"tt":1},{"r":4,"s":2,"tt":2},{"r":1,"s":1,"tt":1}]},{"mka":6,"kind":"teach","items":[{"b":"Al-Quran","t":"1.1  Membaca dan mengamalkan surah As-Syarh  dengan betul dan bertajwid","cont":true},{"b":"Akidah","t":"3.1  Meyakini konsep nama Allah al-hadi dan al-Adlu serta mengaplikasikannya dalam kehidupan secara beradab dan istiqomah","cont":true},{"b":"Jawi","t":"7.1  Membaca, Membina dan Menulis pelbagai jenis teks berdasarkan tema","cont":true}],"r":6,"s":4,"t":2,"rows":[{"r":2,"s":1,"tt":0},{"r":3,"s":2,"tt":1},{"r":1,"s":1,"tt":1}]},{"mka":7,"kind":"teach","items":[{"b":"Al-Quran","t":"1.2  Membaca dan mengamalkan sura Ad-Dhuha dengan betul dan bertajwid dalam kehidupan harian secara beradam dan istiqomah","cont":false},{"b":"Akidah","t":"3.1  Meyakini konsep nama Allah al-hadi dan al-Adlu serta mengaplikasikannya dalam kehidupan secara beradab dan istiqomah","cont":true},{"b":"Jawi","t":"7.1  Membaca, Membina dan Menulis pelbagai jenis teks berdasarkan tema","cont":true}],"r":6,"s":5,"t":3,"rows":[{"r":2,"s":2,"tt":1},{"r":3,"s":2,"tt":1},{"r":1,"s":1,"tt":1}]},{"mka":8,"kind":"teach","items":[{"b":"Al-Quran","t":"1.2  Membaca dan mengamalkan sura Ad-Dhuha dengan betul dan bertajwid dalam kehidupan harian secara beradam dan istiqomah","cont":true},{"b":"Akidah","t":"3.2  Meyakini konsep beriman kepada qada’ dan qadar dan mengaplikasikannya dalam kehidupan secara beradab dan istiqomah","cont":false},{"b":"Jawi","t":"7.1  Membaca, Membina dan Menulis pelbagai jenis teks berdasarkan tema","cont":true}],"r":7,"s":4,"t":3,"rows":[{"r":2,"s":1,"tt":1},{"r":4,"s":2,"tt":2},{"r":1,"s":1,"tt":0}]},{"mka":9,"kind":"teach","items":[{"b":"Al-Quran","t":"1.2  Membaca dan mengamalkan sura Ad-Dhuha dengan betul dan bertajwid dalam kehidupan harian secara beradam dan istiqomah","cont":true},{"b":"Akidah","t":"3.2  Meyakini konsep beriman kepada qada’ dan qadar dan mengaplikasikannya dalam kehidupan secara beradab dan istiqomah","cont":true},{"b":"Jawi","t":"7.1  Membaca, Membina dan Menulis pelbagai jenis teks berdasarkan tema","cont":true}],"r":6,"s":4,"t":2,"rows":[{"r":2,"s":1,"tt":1},{"r":3,"s":2,"tt":1},{"r":1,"s":1,"tt":0}]},{"mka":10,"kind":"teach","items":[{"b":"Al-Quran","t":"1.2  Membaca dan mengamalkan sura Ad-Dhuha dengan betul dan bertajwid dalam kehidupan harian secara beradam dan istiqomah","cont":true},{"b":"Akidah","t":"3.2  Meyakini konsep beriman kepada qada’ dan qadar dan mengaplikasikannya dalam kehidupan secara beradab dan istiqomah","cont":true},{"b":"Jawi","t":"7.1  Membaca, Membina dan Menulis pelbagai jenis teks berdasarkan tema","cont":true}],"r":6,"s":4,"t":2,"rows":[{"r":2,"s":1,"tt":1},{"r":3,"s":2,"tt":1},{"r":1,"s":1,"tt":0}]},{"mka":11,"kind":"teach","items":[{"b":"Al-Quran","t":"1.2  Membaca dan mengamalkan sura Ad-Dhuha dengan betul dan bertajwid dalam kehidupan harian secara beradam dan istiqomah","cont":true},{"b":"Akidah","t":"3.3  Merumus kepentingan mempertahankan akidah daripda perbuatan khurafat","cont":false},{"b":"Jawi","t":"7.1  Membaca, Membina dan Menulis pelbagai jenis teks berdasarkan tema","cont":true}],"r":8,"s":4,"t":2,"rows":[{"r":2,"s":1,"tt":0},{"r":5,"s":3,"tt":2},{"r":1,"s":0,"tt":0}]},{"mka":12,"kind":"teach","items":[{"b":"Al-Quran","t":"1.3  Menghafaz surah as-Syarh dengan betul dan bertajwid serta mengamalkannya dalam kehidupan seharian.","cont":false},{"b":"Akidah","t":"3.3  Merumus kepentingan mempertahankan akidah daripda perbuatan khurafat","cont":true},{"b":"Jawi","t":"7.1  Membaca, Membina dan Menulis pelbagai jenis teks berdasarkan tema","cont":true}],"r":8,"s":5,"t":3,"rows":[{"r":2,"s":2,"tt":1},{"r":5,"s":3,"tt":2},{"r":1,"s":0,"tt":0}]},{"mka":13,"kind":"teach","items":[{"b":"Al-Quran","t":"1.3  Menghafaz surah as-Syarh dengan betul dan bertajwid serta mengamalkannya dalam kehidupan seharian.","cont":true},{"b":"Akidah","t":"3.4  Merumus kepentingan mempertahankan akidah daripda perkara yang boleh menyebabkan riddah","cont":false},{"b":"Jawi","t":"7.1  Membaca, Membina dan Menulis pelbagai jenis teks berdasarkan tema","cont":true}],"r":3,"s":1,"t":1,"rows":[{"r":2,"s":1,"tt":1},{},{"r":1,"s":0,"tt":0}]},{"mka":14,"kind":"teach","items":[{"b":"Al-Quran","t":"1.3  Menghafaz surah as-Syarh dengan betul dan bertajwid serta mengamalkannya dalam kehidupan seharian.","cont":true},{"b":"Akidah","t":"3.4  Merumus kepentingan mempertahankan akidah daripda perkara yang boleh menyebabkan riddah","cont":true},{"b":"Jawi","t":"7.1  Membaca, Membina dan Menulis pelbagai jenis teks berdasarkan tema","cont":true}],"r":3,"s":1,"t":1,"rows":[{"r":2,"s":1,"tt":1},{},{"r":1,"s":0,"tt":0}]},{"mka":15,"kind":"teach","items":[{"b":"Al-Quran","t":"1.3  Menghafaz surah as-Syarh dengan betul dan bertajwid serta mengamalkannya dalam kehidupan seharian.","cont":true},{"b":"Ibadah","t":"4.1  Merumus dan Memahami jenis-jenis hukum dalam islam dengan betul secara beradab dan istiqomah","cont":false},{"b":"Jawi","t":"7.1  Membaca, Membina dan Menulis pelbagai jenis teks berdasarkan tema","cont":true}],"r":8,"s":4,"t":3,"rows":[{"r":2,"s":1,"tt":1},{"r":5,"s":3,"tt":2},{"r":1,"s":0,"tt":0}]},{"mka":16,"kind":"upsa","title":"UPSA"},{"mka":17,"kind":"teach","items":[{"b":"Al-Quran","t":"1.3  Menghafaz surah as-Syarh dengan betul dan bertajwid serta mengamalkannya dalam kehidupan seharian.","cont":true},{"b":"Ibadah","t":"4.1  Merumus dan Memahami jenis-jenis hukum dalam islam dengan betul secara beradab dan istiqomah","cont":true},{"b":"Jawi","t":"7.1  Membaca, Membina dan Menulis pelbagai jenis teks berdasarkan tema","cont":true}],"r":8,"s":4,"t":2,"rows":[{"r":2,"s":1,"tt":0},{"r":5,"s":3,"tt":2},{"r":1,"s":0,"tt":0}]},{"mka":18,"kind":"teach","items":[{"b":"Al-Quran","t":"1.4  Menghafaz surah ad-Dhuha dengan bertajwid serta mengamalkannya secara beradab dan istiqomah dalam kehidupan seharian.","cont":false},{"b":"Ibadah","t":"4.2  Merumus bentuk solat Ketika sakit serta mengamalkannya secara beradab dan istiqomah","cont":false},{"b":"Jawi","t":"7.1  Membaca, Membina dan Menulis pelbagai jenis teks berdasarkan tema","cont":true}],"r":8,"s":5,"t":3,"rows":[{"r":3,"s":2,"tt":1},{"r":5,"s":3,"tt":2},{"r":0,"s":0,"tt":0}]},{"mka":19,"kind":"teach","items":[{"b":"Al-Quran","t":"1.4  Menghafaz surah ad-Dhuha dengan bertajwid serta mengamalkannya secara beradab dan istiqomah dalam kehidupan seharian.","cont":true},{"b":"Ibadah","t":"4.2  Merumus bentuk solat Ketika sakit serta mengamalkannya secara beradab dan istiqomah","cont":true},{"b":"Jawi","t":"7.1  Membaca, Membina dan Menulis pelbagai jenis teks berdasarkan tema","cont":true}],"r":8,"s":5,"t":3,"rows":[{"r":3,"s":2,"tt":1},{"r":5,"s":3,"tt":2},{"r":0,"s":0,"tt":0}]},{"mka":20,"kind":"teach","items":[{"b":"Al-Quran","t":"1.4  Menghafaz surah ad-Dhuha dengan bertajwid serta mengamalkannya secara beradab dan istiqomah dalam kehidupan seharian.","cont":true},{"b":"Ibadah","t":"4.3  Merumus konsep solat jenazah dan mengamalkannya secara beradab dan istiqomah","cont":false},{"b":"Jawi","t":"7.1  Membaca, Membina dan Menulis pelbagai jenis teks berdasarkan tema","cont":true}],"r":7,"s":4,"t":3,"rows":[{"r":2,"s":1,"tt":1},{"r":5,"s":3,"tt":2},{"r":0,"s":0,"tt":0}]},{"mka":21,"kind":"teach","items":[{"b":"Al-Quran","t":"1.4  Menghafaz surah ad-Dhuha dengan bertajwid serta mengamalkannya secara beradab dan istiqomah dalam kehidupan seharian.","cont":true},{"b":"Ibadah","t":"4.3  Merumus konsep solat jenazah dan mengamalkannya secara beradab dan istiqomah","cont":true},{"b":"Jawi","t":"7.2  Mengenal dan menulis khat riq’ah dengan betul","cont":false}],"r":8,"s":5,"t":4,"rows":[{"r":2,"s":1,"tt":1},{"r":5,"s":3,"tt":2},{"r":1,"s":1,"tt":1}]},{"mka":22,"kind":"teach","items":[{"b":"Al-Quran","t":"1.5  Merumus, mengamal dan menghayati surah al-Maun secara beradab dan istiqomah","cont":false},{"b":"Ibadah","t":"4.4  Memahami dan mengamalkan solat fardu","cont":false},{"b":"Jawi","t":"7.2  Mengenal dan menulis khat riq’ah dengan betul","cont":true}],"r":9,"s":6,"t":4,"rows":[{"r":3,"s":2,"tt":1},{"r":5,"s":3,"tt":2},{"r":1,"s":1,"tt":1}]},{"mka":23,"kind":"teach","items":[{"b":"Al-Quran","t":"1.5  Merumus, mengamal dan menghayati surah al-Maun secara beradab dan istiqomah","cont":true},{"b":"Ibadah","t":"4.4  Memahami dan mengamalkan solat fardu","cont":true},{"b":"Jawi","t":"7.2  Mengenal dan menulis khat riq’ah dengan betul","cont":true}],"r":9,"s":6,"t":4,"rows":[{"r":3,"s":2,"tt":1},{"r":5,"s":3,"tt":2},{"r":1,"s":1,"tt":1}]},{"mka":24,"kind":"teach","items":[{"b":"Al-Quran","t":"1.5  Merumus, mengamal dan menghayati surah al-Maun secara beradab dan istiqomah","cont":true},{"b":"Sirah","t":"5.1  Merumus iktibar daripada peristiwa pembentukan kota Madinah serta mengamalkannya secara beradab dan istiqomah","cont":false},{"b":"Jawi","t":"7.2  Mengenal dan menulis khat riq’ah dengan betul","cont":true}],"r":8,"s":5,"t":4,"rows":[{"r":2,"s":1,"tt":1},{"r":5,"s":3,"tt":2},{"r":1,"s":1,"tt":1}]},{"mka":25,"kind":"teach","items":[{"b":"Al-Quran","t":"1.5  Merumus, mengamal dan menghayati surah al-Maun secara beradab dan istiqomah","cont":true},{"b":"Sirah","t":"5.1  Merumus iktibar daripada peristiwa pembentukan kota Madinah serta mengamalkannya secara beradab dan istiqomah","cont":true},{"b":"Jawi","t":"7.2  Mengenal dan menulis khat riq’ah dengan betul","cont":true}],"r":8,"s":5,"t":4,"rows":[{"r":2,"s":1,"tt":1},{"r":5,"s":3,"tt":2},{"r":1,"s":1,"tt":1}]},{"mka":26,"kind":"teach","items":[{"b":"Al-Quran","t":"1.6  Membaca ayat yang mengandungi bacaa mad pada kadar 2, 4 dan 6 harakat dengan betul dan bertajwid secara beradab dan istiqomah","cont":false},{"b":"Sirah","t":"5.2  Merumus iktibar daripada keunggulan sufat tasammuh nabi Muhammad untuk diamalkan secara beradab dan istiqomah","cont":false},{"b":"Jawi","t":"7.2  Mengenal dan menulis khat riq’ah dengan betul","cont":true}],"r":9,"s":6,"t":4,"rows":[{"r":3,"s":2,"tt":1},{"r":5,"s":3,"tt":2},{"r":1,"s":1,"tt":1}]},{"mka":27,"kind":"teach","items":[{"b":"Al-Quran","t":"1.6  Membaca ayat yang mengandungi bacaa mad pada kadar 2, 4 dan 6 harakat dengan betul dan bertajwid secara beradab dan istiqomah","cont":true},{"b":"Sirah","t":"5.2  Merumus iktibar daripada keunggulan sufat tasammuh nabi Muhammad untuk diamalkan secara beradab dan istiqomah","cont":true},{"b":"Jawi","t":"7.2  Mengenal dan menulis khat riq’ah dengan betul","cont":true}],"r":9,"s":6,"t":3,"rows":[{"r":3,"s":2,"tt":1},{"r":5,"s":3,"tt":2},{"r":1,"s":1,"tt":0}]},{"mka":28,"kind":"teach","items":[{"b":"Al-Quran","t":"1.6  Membaca ayat yang mengandungi bacaa mad pada kadar 2, 4 dan 6 harakat dengan betul dan bertajwid secara beradab dan istiqomah","cont":true},{"b":"Sirah","t":"5.3  Merumus iktibar dan menilai keperibadian Nabi Muhammad ﷺ dalam konsep jihad secara  beradab dan istiqomah","cont":false},{"b":"Jawi","t":"7.2  Mengenal dan menulis khat riq’ah dengan betul","cont":true}],"r":8,"s":5,"t":3,"rows":[{"r":2,"s":1,"tt":1},{"r":5,"s":3,"tt":2},{"r":1,"s":1,"tt":0}]},{"mka":29,"kind":"teach","items":[{"b":"Al-Quran","t":"1.6  Membaca ayat yang mengandungi bacaa mad pada kadar 2, 4 dan 6 harakat dengan betul dan bertajwid secara beradab dan istiqomah","cont":true},{"b":"Sirah","t":"5.3  Merumus iktibar dan menilai keperibadian Nabi Muhammad ﷺ dalam konsep jihad secara  beradab dan istiqomah","cont":true},{"b":"Jawi","t":"7.2  Mengenal dan menulis khat riq’ah dengan betul","cont":true}],"r":8,"s":5,"t":3,"rows":[{"r":2,"s":1,"tt":1},{"r":5,"s":3,"tt":2},{"r":1,"s":1,"tt":0}]},{"mka":30,"kind":"teach","items":[{"b":"Al-Quran","t":"1.7  Membaca ayat yang mengandungi bacaa mad pada kadar 4 dan 5 harakat dengan betul dan bertajwid secara beradab dan istiqomah","cont":false},{"b":"Adab & Akhlak","t":"6.1  Merumus konsep pergaulan dalam islam dan mengamalkannya secara beradab dan istiqomah","cont":false},{"b":"Jawi","t":"7.2  Mengenal dan menulis khat riq’ah dengan betul","cont":true}],"r":9,"s":5,"t":3,"rows":[{"r":3,"s":2,"tt":1},{"r":5,"s":3,"tt":2},{"r":1,"s":0,"tt":0}]},{"mka":31,"kind":"teach","items":[{"b":"Al-Quran","t":"1.7  Membaca ayat yang mengandungi bacaa mad pada kadar 4 dan 5 harakat dengan betul dan bertajwid secara beradab dan istiqomah","cont":true},{"b":"Adab & Akhlak","t":"6.1  Merumus konsep pergaulan dalam islam dan mengamalkannya secara beradab dan istiqomah","cont":true},{"b":"Jawi","t":"7.2  Mengenal dan menulis khat riq’ah dengan betul","cont":true}],"r":9,"s":5,"t":3,"rows":[{"r":3,"s":2,"tt":1},{"r":5,"s":3,"tt":2},{"r":1,"s":0,"tt":0}]},{"mka":32,"kind":"teach","items":[{"b":"Al-Quran","t":"1.7  Membaca ayat yang mengandungi bacaa mad pada kadar 4 dan 5 harakat dengan betul dan bertajwid secara beradab dan istiqomah","cont":true},{"b":"Adab & Akhlak","t":"6.2  Merumus konsep adab berziarah dan mengamalkannya secara beradab dan istiqomah","cont":false},{"b":"Jawi","t":"7.2  Mengenal dan menulis khat riq’ah dengan betul","cont":true}],"r":8,"s":4,"t":3,"rows":[{"r":2,"s":1,"tt":1},{"r":5,"s":3,"tt":2},{"r":1,"s":0,"tt":0}]},{"mka":33,"kind":"teach","items":[{"b":"Al-Quran","t":"1.7  Membaca ayat yang mengandungi bacaa mad pada kadar 4 dan 5 harakat dengan betul dan bertajwid secara beradab dan istiqomah","cont":true},{"b":"Adab & Akhlak","t":"6.2  Merumus konsep adab berziarah dan mengamalkannya secara beradab dan istiqomah","cont":true},{"b":"Jawi","t":"7.2  Mengenal dan menulis khat riq’ah dengan betul","cont":true}],"r":8,"s":4,"t":3,"rows":[{"r":2,"s":1,"tt":1},{"r":5,"s":3,"tt":2},{"r":1,"s":0,"tt":0}]},{"mka":34,"kind":"teach","items":[{"b":"Al-Quran","t":"1.8  Membaca ayat yang mengandungi bacaa mad pada kadar 6 harakat dengan betul dan bertajwid secara beradab dan istiqomah","cont":false},{"b":"Adab & Akhlak","t":"6.3  Merumus konsep adab bernegara dan mengamalkannya secara beradab dan istiqomah","cont":false},{"b":"Jawi","t":"7.2  Mengenal dan menulis khat riq’ah dengan betul","cont":true}],"r":9,"s":5,"t":3,"rows":[{"r":3,"s":2,"tt":1},{"r":5,"s":3,"tt":2},{"r":1,"s":0,"tt":0}]},{"mka":35,"kind":"uasa","title":"UASA"},{"mka":36,"kind":"teach","items":[{"b":"Al-Quran","t":"1.8  Membaca ayat yang mengandungi bacaa mad pada kadar 6 harakat dengan betul dan bertajwid secara beradab dan istiqomah","cont":true},{"b":"Adab & Akhlak","t":"6.3  Merumus konsep adab bernegara dan mengamalkannya secara beradab dan istiqomah","cont":true},{"b":"Jawi","t":"7.2  Mengenal dan menulis khat riq’ah dengan betul","cont":true}],"r":9,"s":5,"t":3,"rows":[{"r":3,"s":2,"tt":1},{"r":5,"s":3,"tt":2},{"r":1,"s":0,"tt":0}]},{"mka":37,"kind":"teach","items":[{"b":"Al-Quran","t":"1.8  Membaca ayat yang mengandungi bacaa mad pada kadar 6 harakat dengan betul dan bertajwid secara beradab dan istiqomah","cont":true},{"b":"Adab & Akhlak","t":"6.4  Merumus konsep adab terhadap harta benda dan kemudahan awam dan mengamalkannya secara beradab dan istiqomah","cont":false},{"b":"Jawi","t":"7.2  Mengenal dan menulis khat riq’ah dengan betul","cont":true}],"r":7,"s":4,"t":3,"rows":[{"r":2,"s":1,"tt":1},{"r":5,"s":3,"tt":2},{"r":0,"s":0,"tt":0}]},{"mka":38,"kind":"teach","items":[{"b":"Al-Quran","t":"1.8  Membaca ayat yang mengandungi bacaa mad pada kadar 6 harakat dengan betul dan bertajwid secara beradab dan istiqomah","cont":true},{"b":"Adab & Akhlak","t":"6.4  Merumus konsep adab terhadap harta benda dan kemudahan awam dan mengamalkannya secara beradab dan istiqomah","cont":true},{"b":"Jawi","t":"7.2  Mengenal dan menulis khat riq’ah dengan betul","cont":true}],"r":7,"s":4,"t":3,"rows":[{"r":2,"s":1,"tt":1},{"r":5,"s":3,"tt":2},{"r":0,"s":0,"tt":0}]},{"mka":39,"kind":"admin","title":"Minggu Ulangkaji / Penandaan"},{"mka":40,"kind":"admin","title":"Pengurusan Data"},{"mka":41,"kind":"admin","title":"Pelaporan PBD 2"},{"mka":42,"kind":"admin","title":"Budaya Tutup Sekolah"}],"source":"KONTRAK LATIHAN TAHUN 6 2026.docx","mapping":"agihan","flags":["3.4"],"totals":{"Al-Quran":{"r":80,"s":48,"t":32,"n":8},"Hadis":{"r":10,"s":6,"t":4,"n":1},"Akidah":{"r":30,"s":18,"t":12,"n":4},"Ibadah":{"r":40,"s":24,"t":16,"n":4},"Sirah":{"r":30,"s":18,"t":12,"n":3},"Adab & Akhlak":{"r":40,"s":24,"t":16,"n":4},"Jawi":{"r":30,"s":18,"t":12,"n":2}},"sk":[{"head":"AL-QURAN","rows":[{"sk":"1.1","t":"Membaca dan mengamalkan surah As-Syarh  dengan betul dan bertajwid","r":10,"s":6,"tt":4},{"sk":"1.2","t":"Membaca dan mengamalkan sura Ad-Dhuha dengan betul dan bertajwid dalam kehidupan harian secara beradam dan istiqomah","r":10,"s":6,"tt":4},{"sk":"1.3","t":"Menghafaz surah as-Syarh dengan betul dan bertajwid serta mengamalkannya dalam kehidupan seharian.","r":10,"s":6,"tt":4},{"sk":"1.4","t":"Menghafaz surah ad-Dhuha dengan bertajwid serta mengamalkannya secara beradab dan istiqomah dalam kehidupan seharian.","r":10,"s":6,"tt":4},{"sk":"1.5","t":"Merumus, mengamal dan menghayati surah al-Maun secara beradab dan istiqomah","r":10,"s":6,"tt":4},{"sk":"1.6","t":"Membaca ayat yang mengandungi bacaa mad pada kadar 2, 4 dan 6 harakat dengan betul dan bertajwid secara beradab dan istiqomah","r":10,"s":6,"tt":4},{"sk":"1.7","t":"Membaca ayat yang mengandungi bacaa mad pada kadar 4 dan 5 harakat dengan betul dan bertajwid secara beradab dan istiqomah","r":10,"s":6,"tt":4},{"sk":"1.8","t":"Membaca ayat yang mengandungi bacaa mad pada kadar 6 harakat dengan betul dan bertajwid secara beradab dan istiqomah","r":10,"s":6,"tt":4}]},{"head":"HADIS","rows":[{"sk":"2.1","t":"Merumus dan menghayati hadis larangan rasuah secara beradah dan istiqomah","r":10,"s":6,"tt":4}]},{"head":"AKIDAH","rows":[{"sk":"3.1","t":"Meyakini konsep nama Allah al-hadi dan al-Adlu serta mengaplikasikannya dalam kehidupan secara beradab dan istiqomah","r":10,"s":6,"tt":4},{"sk":"3.2","t":"Meyakini konsep beriman kepada qada’ dan qadar dan mengaplikasikannya dalam kehidupan secara beradab dan istiqomah","r":10,"s":6,"tt":4},{"sk":"3.3","t":"Merumus kepentingan mempertahankan akidah daripda perbuatan khurafat","r":10,"s":6,"tt":4},{"sk":"3.4","t":"Merumus kepentingan mempertahankan akidah daripda perkara yang boleh menyebabkan riddah"}]},{"head":"IBADAH","rows":[{"sk":"4.1","t":"Merumus dan Memahami jenis-jenis hukum dalam islam dengan betul secara beradab dan istiqomah","r":10,"s":6,"tt":4},{"sk":"4.2","t":"Merumus bentuk solat Ketika sakit serta mengamalkannya secara beradab dan istiqomah","r":10,"s":6,"tt":4},{"sk":"4.3","t":"Merumus konsep solat jenazah dan mengamalkannya secara beradab dan istiqomah","r":10,"s":6,"tt":4},{"sk":"4.4","t":"Memahami dan mengamalkan solat fardu","r":10,"s":6,"tt":4}]},{"head":"SIRAH","rows":[{"sk":"5.1","t":"Merumus iktibar daripada peristiwa pembentukan kota Madinah serta mengamalkannya secara beradab dan istiqomah","r":10,"s":6,"tt":4},{"sk":"5.2","t":"Merumus iktibar daripada keunggulan sufat tasammuh nabi Muhammad untuk diamalkan secara beradab dan istiqomah","r":10,"s":6,"tt":4},{"sk":"5.3","t":"Merumus iktibar dan menilai keperibadian Nabi Muhammad ﷺ dalam konsep jihad secara  beradab dan istiqomah","r":10,"s":6,"tt":4}]},{"head":"ADAB & AKHLAK","rows":[{"sk":"6.1","t":"Merumus konsep pergaulan dalam islam dan mengamalkannya secara beradab dan istiqomah","r":10,"s":6,"tt":4},{"sk":"6.2","t":"Merumus konsep adab berziarah dan mengamalkannya secara beradab dan istiqomah","r":10,"s":6,"tt":4},{"sk":"6.3","t":"Merumus konsep adab bernegara dan mengamalkannya secara beradab dan istiqomah","r":10,"s":6,"tt":4},{"sk":"6.4","t":"Merumus konsep adab terhadap harta benda dan kemudahan awam dan mengamalkannya secara beradab dan istiqomah","r":10,"s":6,"tt":4}]},{"head":"JAWI","rows":[{"sk":"7.1","t":"Membaca, Membina dan Menulis pelbagai jenis teks berdasarkan tema","r":15,"s":9,"tt":6},{"sk":"7.2","t":"Mengenal dan menulis khat riq’ah dengan betul","r":15,"s":9,"tt":6}]}]}}};
+const MON=['Jan','Feb','Mac','Apr','Mei','Jun','Jul','Ogo','Sep','Okt','Nov','Dis'];
+const MONF=['Januari','Februari','Mac','April','Mei','Jun','Julai','Ogos','September','Oktober','November','Disember'];
+const SPEC={open:'MINGGU AWAL',upsa:'UPSA',uasa:'UASA',admin:'PENTADBIRAN'};
+const SPEC_TITLE={upsa:'Ujian Pertengahan Sesi Akademik',uasa:'Ujian Akhir Sesi Akademik'};
+const COLS={
+  1:{type:'sk', cols:[['r','Rendah'],['s','Sederhana'],['t','Tinggi']], sum:['r','s','t']},
+  2:{type:'w', nobt:1, cols:[['bt','Bil. set'],['r','Rendah'],['s','Sederhana'],['t','Tinggi']], sum:['r','s','t']},
+  3:{type:'b',  cols:[['quran','Al-Quran'],['hadis','Hadis'],['ulum','Ulum'],['adab','Adab'],['jawi','Jawi']], sum:['quran','hadis','ulum','adab','jawi']},
+  4:{type:'w',  cols:[['bt','Bil. taksir'],['r','Rendah'],['s','Sederhana'],['t','Tinggi']], sum:['r','s','t']},
+  5:{type:'w',  cols:[['bt','Bil. taksir'],['r','Rendah'],['s','Sederhana'],['t','Tinggi']], sum:['r','s','t']},
+  6:{type:'sk', cols:[['r','Rendah'],['s','Sederhana'],['t','Tinggi']], sum:['r','s','t']}
+};
+(function(){
+  const sumq=(w,ks)=>w.items.reduce((a,it)=>a+ks.reduce((b,k)=>b+((it.q||{})[k]||0),0),0);
+  DATA.contracts[2].weeks.forEach(w=>{if(w.kind==='teach'){w.bt=null;w.r=20;w.s=0;w.t=0;}});
+  DATA.contracts[3].weeks.forEach(w=>{if(w.kind==='teach'){w.bt=null;w.r=sumq(w,['quran','hadis','ulum','adab','jawi']);w.s=0;w.t=0;}});
+  [1,6].forEach(y=>DATA.contracts[y].weeks.forEach(w=>{if(w.kind==='teach'){w.bt=null;w.r=(w.rows||[]).reduce((a,r)=>a+(r.r||0)+(r.s||0)+(r.tt||0),0);w.s=0;w.t=0;}}));
+  [1,3,6].forEach(y=>{COLS[y]={type:'w',nobt:1,cols:[['bt','Bil. taksir'],['r','Rendah'],['s','Sederhana'],['t','Tinggi']],sum:['r','s','t']};});
+})();
+const $=id=>document.getElementById(id);
+const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const fd=iso=>{const [y,m,d]=iso.split('-').map(Number);return d+' '+MON[m-1]};
+const hasArabic=s=>/[؀-ۿ]/.test(s);
+const GURU=['ZARILA BINTI ZAINAL ABIDIN','NOR AZHANAH BINTI RABION','M ADIB M KIAR JOHARI','MOHD ZULKIFLI BIN ISMAIL','NIK RABIATUL ADAWIYAH','NUR AZIMA BINTI ABDULLAH','AZLINA FAZIERA BINTI AHMAD','SITI NABILAH BINTI AB WAHAB','ZUBAIDAH HARUN'];
+const KELAS={1:['AMANAH','ARIF','ASPIRASI'],2:['AMANAH','ARIF','ASPIRASI'],3:['AMANAH','ARIF','ASPIRASI'],4:['AKTIF','AMANAH','ARIF','ASPIRASI'],5:['AMANAH','ARIF','ASPIRASI'],6:['AKTIF','AMANAH','ARIF','ASPIRASI']};
+const state={g:'A',y:3,v:'all'};
+const store={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
+
+function init(){
+  $('selGroup').innerHTML=Object.keys(DATA.cal).map(k=>`<option value="${k}">${DATA.cal[k].label}</option>`).join('');
+  $('selGuru').innerHTML='<option value="">Pilih guru</option>'+GURU.map(n=>`<option value="${n}">${n}</option>`).join('')+'<option value="__other">Lain-lain (taip sendiri)</option>';
+  $('selYear').innerHTML=[1,2,3,4,5,6].map(y=>`<option value="${y}">Tahun ${y}</option>`).join('');
+  const views=[['all','Semua minggu'],['p1','Penggal 1 (Jan – Mei)'],['p2','Penggal 2 (Jun – Dis)']].concat(MONF.map((m,i)=>['m'+i,m]));
+  $('selView').innerHTML=views.map(v=>`<option value="${v[0]}">${v[1]}</option>`).join('');
+  readHash();
+  $('selGroup').addEventListener('change',e=>{state.g=e.target.value;state.v='all';sync();});
+  $('selYear').addEventListener('change',e=>{state.y=+e.target.value;sync();});
+  $('selView').addEventListener('change',e=>{state.v=e.target.value;render();});
+  $('selGuru').addEventListener('change',e=>{if(e.target.value==='__other'){$('inGuru').hidden=false;$('inGuru').focus();store.set('klm27:guru:'+state.y,$('inGuru').value);}else{$('inGuru').hidden=true;store.set('klm27:guru:'+state.y,e.target.value);}});
+  $('inGuru').addEventListener('input',e=>store.set('klm27:guru:'+state.y,e.target.value));
+  $('selKelas').addEventListener('change',e=>{if(e.target.value==='__other'){$('inKelas').hidden=false;$('inKelas').focus();store.set('klm27:kelas:'+state.y,$('inKelas').value);}else{$('inKelas').hidden=true;store.set('klm27:kelas:'+state.y,e.target.value);}});
+  $('inKelas').addEventListener('input',e=>store.set('klm27:kelas:'+state.y,e.target.value));
+  $('btnCopy').addEventListener('click',copyTable);
+  initQPanel();
+  $('dlgClose').addEventListener('click',()=>$('dlg').close());
+  window.addEventListener('hashchange',()=>{readHash();syncControls();render();});
+  syncControls();render();
+}
+function readHash(){
+  const m=/^#kumpulan-([ab])-tahun-([1-6])$/.exec(location.hash||'');
+  if(m){state.g=m[1].toUpperCase();state.y=+m[2];}
+}
+function sync(){
+  try{history.replaceState(null,'','#kumpulan-'+state.g.toLowerCase()+'-tahun-'+state.y);}catch(e){}
+  syncControls();render();
+}
+function syncControls(){
+  $('selGroup').value=state.g;$('selYear').value=state.y;$('selView').value=state.v;
+  const c=DATA.contracts[state.y];
+  const sg=store.get('klm27:guru:'+state.y), sk=store.get('klm27:kelas:'+state.y);
+  const gv=sg!=null?sg:(c.guru||'');
+  if(GURU.indexOf(gv)>=0||gv===''){$('selGuru').value=gv;$('inGuru').hidden=true;$('inGuru').value='';}
+  else{$('selGuru').value='__other';$('inGuru').hidden=false;$('inGuru').value=gv;}
+  const kl=KELAS[state.y].map(k=>state.y+' '+k);
+  $('selKelas').innerHTML='<option value="">Pilih kelas</option>'+kl.map(k=>`<option value="${k}">${k}</option>`).join('')+'<option value="__other">Lain-lain</option>';
+  let kv=sk!=null?sk:(c.kelas?(/^\d/.test(c.kelas)?c.kelas:state.y+' '+c.kelas):'');
+  if(kl.indexOf(kv)>=0||kv===''){$('selKelas').value=kv;$('inKelas').hidden=true;$('inKelas').value='';}
+  else{$('selKelas').value='__other';$('inKelas').hidden=false;$('inKelas').value=kv;}
+  $('groupHint').textContent=DATA.cal[state.g].label+': '+DATA.cal[state.g].negeri+'. Hari persekolahan '+DATA.cal[state.g].weekdays+'.';
+}
+/* ---------- tetapan soalan (aras R:S:T dan jumlah) ---------- */
+function getRatio(){try{const r=JSON.parse(store.get('klm27:ratio')||'null');if(Array.isArray(r)&&r.length===3&&r.every(x=>x>=0)&&r.some(x=>x>0))return r;}catch(e){}return [5,3,2];}
+function getQ(){try{const q=JSON.parse(store.get('klm27:q:'+state.y)||'null');if(q&&q.mode)return q;}catch(e){}return {mode:'file',n:20};}
+function ovr(mka){const n=parseInt(store.get('klm27:qw:'+state.y+':'+mka),10);return isNaN(n)?null:n;}
+function split3(t,rt){const s=rt[0]+rt[1]+rt[2],ex=rt.map(x=>t*x/s),fl=ex.map(Math.floor);let left=t-fl.reduce((a,b)=>a+b,0);const ord=[0,1,2].sort((a,b)=>(ex[b]-fl[b])-(ex[a]-fl[a])||a-b);for(let i=0;i<left;i++)fl[ord[i]]++;return fl;}
+function scaleTo(arr,N){
+  const k=arr.length;if(!k)return [];
+  const s=arr.reduce((a,b)=>a+b,0);
+  const ex=s>0?arr.map(x=>x*N/s):arr.map(()=>N/k),fl=ex.map(Math.floor);
+  let left=N-fl.reduce((a,b)=>a+b,0);
+  const ord=ex.map((_,i)=>i).sort((a,b)=>(ex[b]-fl[b])-(ex[a]-fl[a])||a-b);
+  for(let i=0;i<left;i++)fl[ord[i]]++;return fl;
+}
+/* Pengiraan minggu: jumlah soalan ikut fail / tetapan guru / ubah suai minggu, kemudian bahagi ikut nisbah R:S:T */
+function effWeek(w,cfg){
+  const rt=getRatio(),q=getQ(),o=ovr(w.mka);
+  let items;
+  if(cfg.type==='w')items=[{tot:(w.r||0)+(w.s||0)+(w.t||0)}];
+  else if(cfg.type==='sk')items=w.items.map((it,i)=>{const r=(w.rows&&w.rows[i])||{};return {tot:(r.r||0)+(r.s||0)+(r.tt||0)};});
+  else items=w.items.map(it=>{const qq=it.q||{},c={};cfg.sum.forEach(k=>c[k]=qq[k]||0);return {c,set:it.set,tot:cfg.sum.reduce((a,k)=>a+c[k],0)};});
+  const fileTotal=items.reduce((a,i)=>a+i.tot,0);
+  const target=o!=null?o:(q.mode==='custom'?q.n:null);
+  if(target!=null){
+    if(cfg.type==='w')items[0].tot=target;
+    else{
+      const t2=scaleTo(items.map(i=>i.tot),target);
+      items.forEach((it,i)=>{
+        if(it.c){const base=cfg.sum.map(k=>it.c[k]);if(it.tot>0){const sc=scaleTo(base,t2[i]);cfg.sum.forEach((k,j)=>it.c[k]=sc[j]);}else cfg.sum.forEach(k=>it.c[k]=0);}
+        it.tot=t2[i];
+      });
+    }
+  }
+  const R=[0,0,0];
+  items.forEach(it=>{it.rst=it.tot>0?split3(it.tot,rt):[0,0,0];for(let j=0;j<3;j++)R[j]+=it.rst[j];});
+  return {items,total:items.reduce((a,i)=>a+i.tot,0),rst:R,fileTotal,ovr:o};
+}
+function weekTotal(w,cfg){return w.kind==='teach'?effWeek(w,cfg).total:0;}
+function inView(row){
+  const v=state.v;
+  if(v==='all')return true;
+  if(v==='p1')return row.penggal===1;
+  if(v==='p2')return row.penggal===2;
+  const m=+v.slice(1);
+  const a=+row.frm.slice(5,7)-1,b=+row.to.slice(5,7)-1;
+  return a===m||b===m;
+}
+function todayIso(){const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
+function stKey(mka){return 'klm27:done:'+state.y+':'+mka}
+const nz=v=>v?v:'';
+
+function render(){
+  const cal=DATA.cal[state.g], con=DATA.contracts[state.y], cfg=COLS[state.y];
+  const byMka={}; con.weeks.forEach(w=>byMka[w.mka]=w);
+  const bcols=cfg.type==='b'?cfg.cols:[];
+  const ncol=4+(cfg.type==='w'&&!cfg.nobt?1:0)+bcols.length+5;
+  const lastTitle=cfg.type==='sk'?'Standard kandungan':'Tajuk / standard kandungan';
+  let head='<thead><tr><th class="ck"></th><th>MKA</th><th>Tarikh</th><th>'+lastTitle+'</th>'+
+    (cfg.type==='w'&&!cfg.nobt?'<th class="n">Bil. taksir</th>':'')+bcols.map(c=>`<th class="n">${c[1]}</th>`).join('')+
+    '<th class="n">Rendah</th><th class="n">Sederhana</th><th class="n">Tinggi</th><th class="n">Jumlah soalan</th><th class="n">Ubah jumlah</th></tr></thead>';
+  let totalQ=0,teachN=0,doneN=0,edited=0;
+  const sums={1:0,2:0};
+  cal.rows.forEach(r=>{if(r.type==='week'){const w=byMka[r.mka];if(w&&w.kind==='teach'){const e=effWeek(w,cfg);teachN++;totalQ+=e.total;sums[r.penggal]+=e.total;if(e.ovr!=null)edited++;if(store.get(stKey(r.mka))==='1')doneN++;}}});
+  const first=cal.rows.find(r=>r.type==='week'),last=[...cal.rows].reverse().find(r=>r.type==='week');
+  const q=getQ(),rt=getRatio();
+  $('stats').innerHTML=
+    `<div class="stat"><b>${cal.nweeks}</b><span>minggu persekolahan (${fd(first.frm)} – ${fd(last.to)} 2027)</span></div>`+
+    `<div class="stat"><b>${teachN}</b><span>minggu ada kandungan Tahun ${state.y}</span></div>`+
+    `<div class="stat"><b>${totalQ.toLocaleString('ms-MY')}</b><span>jumlah soalan (${q.mode==='custom'?'tetapan guru':'ikut fail kontrak'}${edited?', '+edited+' minggu diubah':''})</span></div>`+
+    `<div class="stat"><b>${doneN}/${teachN}</b><span>minggu ditanda selesai</span><div class="bar"><i style="width:${teachN?Math.round(doneN/teachN*100):0}%"></i></div></div>`;
+  const today=todayIso();
+  let body='',shown=0,curP=0;
+  cal.rows.forEach(r=>{
+    if(!inView(r))return;
+    if(r.penggal!==curP && r.type==='week'){
+      curP=r.penggal;
+      body+=`<tbody><tr class="sep"><td colspan="${ncol}">Penggal ${curP}<small>${curP===1?'4 Jan – 20 Mei':'6 Jun – 3 Dis'} · ${sums[curP].toLocaleString('ms-MY')} soalan</small></td></tr></tbody>`;
+    }
+    if(r.type==='cuti'){
+      body+=`<tbody><tr class="cuti"><td colspan="${ncol-1}">${esc(r.name)}</td><td class="tail">${fd(r.frm)} – ${fd(r.to)}</td></tr></tbody>`;
+      return;
+    }
+    const w=byMka[r.mka]; shown++;
+    const dateCell=`<td class="date">${fd(r.frm)} – ${fd(r.to)}<small>${r.hari} hari</small>`+(r.notes||[]).map(n=>`<span class="hol">${fd(n[0])}: ${esc(n[1])}</span>`).join('')+`</td>`;
+    if(!w){ body+=`<tbody class="week"><tr><td class="ck"></td><td class="mka">${r.mka}</td>${dateCell}<td class="title" colspan="${ncol-3}" style="color:var(--muted)">Tiada kandungan dalam fail kontrak. Isi mengikut keperluan.</td></tr></tbody>`; return; }
+    if(w.kind!=='teach'){
+      const ttl=SPEC_TITLE[w.kind]?SPEC_TITLE[w.kind]:w.title;
+      body+=`<tbody class="week"><tr class="spec ${w.kind==='upsa'||w.kind==='uasa'?'exam':w.kind}"><td class="ck"></td><td class="mka">${r.mka}</td>${dateCell}<td class="title" colspan="${ncol-3}"><span class="tag">${SPEC[w.kind]}</span>${esc(ttl)}</td></tr></tbody>`;
+      return;
+    }
+    const isNow=today>=r.frm&&today<=r.to, done=store.get(stKey(r.mka))==='1';
+    const e=effWeek(w,cfg), items=w.items, n=items.length||1;
+    let rows='';
+    items.forEach((it,i)=>{
+      let cells='';
+      if(i===0){
+        cells+=`<td class="ck" rowspan="${n}"><input type="checkbox" data-mka="${r.mka}" aria-label="Tanda MKA ${r.mka} selesai" ${done?'checked':''}></td>`+
+               `<td class="mka" rowspan="${n}">${r.mka}</td>`+dateCell.replace('<td class="date">',`<td class="date" rowspan="${n}">`);
+      }
+      const dir=hasArabic(it.t)?' dir="rtl" lang="ar"':'';
+      const label=(it.b?`<span class="bid">${esc(it.b)}</span>`:'')+`<span${hasArabic(it.t)?' class="jawi"':''}${dir}>${esc(it.t)}</span>`+(it.cont?'<span class="cont">(sambungan)</span>':'');
+      cells+=`<td class="title">${label}</td>`;
+      if(cfg.type==='w'){
+        if(i===0)cells+=(cfg.nobt?'':`<td class="n" rowspan="${n}">${w.bt==null?'':w.bt}</td>`)+[0,1,2].map(j=>`<td class="n" rowspan="${n}">${nz(e.rst[j])}</td>`).join('')+`<td class="n" rowspan="${n}"><b>${nz(e.total)}</b></td>`;
+      }else{
+        const ei=e.items[i];
+        cells+=bcols.map(([k])=>`<td class="n">${k==='set'?(ei.set==null?'':ei.set):nz(ei.c?ei.c[k]:0)}</td>`).join('')+[0,1,2].map(j=>`<td class="n">${nz(ei.rst[j])}</td>`).join('')+`<td class="n">${ei.tot?`<b>${ei.tot}</b>`:''}</td>`;
+      }
+      if(i===0)cells+=`<td class="n inp" rowspan="${n}"><input type="number" min="0" max="999" inputmode="numeric" class="qin${e.ovr!=null?' set':''}" data-mka="${r.mka}" value="${e.ovr!=null?e.ovr:''}" placeholder="${e.total}" aria-label="Jumlah soalan MKA ${r.mka}"></td>`;
+      rows+=`<tr>${cells}</tr>`;
+    });
+    body+=`<tbody class="week${isNow?' now':''}${done?' done':''}">${rows}</tbody>`;
+  });
+  if(!shown) body+=`<tbody><tr><td colspan="${ncol}" class="empty">Tiada minggu persekolahan dalam paparan ini.</td></tr></tbody>`;
+  const foot=`<tfoot><tr><td colspan="${ncol-1}">Jumlah soalan Tahun ${state.y} (setahun)</td><td class="n">${totalQ.toLocaleString('ms-MY')}</td></tr></tfoot>`;
+  $('tbl').innerHTML=head+body+foot;
+  $('tbl').querySelectorAll('input[type=checkbox][data-mka]').forEach(cb=>cb.addEventListener('change',ev=>{
+    store.set(stKey(ev.target.dataset.mka),ev.target.checked?'1':'0');render();
+  }));
+  $('tbl').querySelectorAll('input.qin').forEach(inp=>inp.addEventListener('change',ev=>{
+    const v=ev.target.value.trim(),k='klm27:qw:'+state.y+':'+ev.target.dataset.mka;
+    if(v===''||isNaN(parseInt(v,10)))store.set(k,'');else store.set(k,String(Math.max(0,Math.min(999,parseInt(v,10)))));
+    render();
+  }));
+  renderNotes(con);
+  syncQPanel();
+}
+/* ---------- panel tetapan soalan ---------- */
+function syncQPanel(){
+  const q=getQ(),rt=getRatio();
+  $('qMode').value=q.mode;$('qN').value=q.n;$('qN').disabled=q.mode!=='custom';
+  $('rR').value=rt[0];$('rS').value=rt[1];$('rT').value=rt[2];
+  const s=rt[0]+rt[1]+rt[2];
+  $('rPct').textContent=`Peratus: Rendah ${Math.round(rt[0]/s*100)}%, Sederhana ${Math.round(rt[1]/s*100)}%, Tinggi ${Math.round(rt[2]/s*100)}%. Setiap soalan dibahagi mengikut nisbah ini.`;
+}
+function initQPanel(){
+  $('qMode').addEventListener('change',e=>{const q=getQ();q.mode=e.target.value;store.set('klm27:q:'+state.y,JSON.stringify(q));render();});
+  $('qN').addEventListener('change',e=>{const q=getQ();q.n=Math.max(0,Math.min(999,parseInt(e.target.value,10)||0));store.set('klm27:q:'+state.y,JSON.stringify(q));render();});
+  const rc=()=>{const r=['rR','rS','rT'].map(i=>Math.max(0,parseFloat($(i).value)||0));if(r.some(x=>x>0))store.set('klm27:ratio',JSON.stringify(r));render();};
+  ['rR','rS','rT'].forEach(i=>$(i).addEventListener('change',rc));
+  $('rReset').addEventListener('click',()=>{store.set('klm27:ratio','');render();});
+  $('qClear').addEventListener('click',()=>{for(let m=1;m<=42;m++)store.set('klm27:qw:'+state.y+':'+m,'');render();toast('Ubah suai setiap minggu dikosongkan.');});
+}
+function renderNotes(con){
+  const n=[];
+  if(con.mapping==='agihan'){
+    n.push(`<b>Agihan mingguan dicadangkan.</b> Fail asal Tahun ${con.year} hanya menyenaraikan standard kandungan (SK) dan bilangan soalan, tanpa jadual mingguan. Al-Quran, Ulum &amp; Adab dan Jawi disusun selari sepanjang minggu mengajar, dan soalan setiap SK dibahagi sama rata. Laraskan mengikut perancangan anda.`);
+    n.push(`Jumlah soalan dikira semula daripada baris SK; beberapa jumlah dalam fail asal tidak sepadan (contohnya Sirah dan Jawi).`);
+    if(con.flags&&con.flags.length) n.push(`SK ${con.flags.join(', ')} tiada bilangan soalan dalam fail asal. Sila isi.`);
+    if(con.year===6) n.push(`Hadis (SK 2.1) digabungkan dalam lajur Ulum &amp; Adab.`);
+  }
+  if(con.year===5) n.push(`<b>Aras soalan Tahun 5 dibetulkan.</b> Fail asal menyimpan aras 4 : 1 : 1 yang tidak mengikut formula 5 : 3 : 2. Jumlah 6 soalan seminggu dikekalkan dan dibahagi semula 3 : 2 : 1. Bil. taksir 33 seminggu dipaparkan seperti fail asal. Sila semak sama ada jumlah soalan 6 seminggu itu betul, dan ubah dalam Tetapan soalan jika perlu.`);
+  if(con.note) n.push(esc(con.note));
+  $('notices').innerHTML=n.length?`<div class="notice">${n.map(x=>`<p>${x}</p>`).join('')}</div>`:'';
+  let f=`<p><b>Sumber:</b> Kalendar Akademik Tahun 2027 (Lampiran A, B dan C) dan fail kontrak latihan murid ${esc(con.source)}. Kandungan dibawa mengikut nombor MKA dalam fail 2026 dan tarikh dikira semula untuk 2027.</p>`+
+    `<p>Tarikh minggu mengambil kira cuti tambahan KPM. Cuti am yang tiada dalam lampiran (cuti ganti Hari Pekerja, Awal Muharram, Maulidur Rasul, Hari Malaysia, Deepavali) dikesan daripada jumlah hari persekolahan dalam kalendar dan telah disemak sepadan. UPSA dan UASA diletakkan pada MKA 16 dan MKA 35 seperti kontrak 2026; ubah mengikut jadual peperiksaan sekolah.</p>`;
+  if(state.g==='A') f+=`<p>Kedah: 8 Februari ialah cuti tambahan untuk Kelantan dan Terengganu sahaja dalam lampiran. Jadual ini mengikut jumlah hari Kumpulan A dalam kalendar, jadi anggap 8 Februari sebagai cuti. Jika sekolah anda beroperasi pada hari itu, tambah satu hari pada MKA 5 atau 6.</p>`;
+  $('foot').innerHTML=f;
+}
+function toast(t){const e=$('toast');e.textContent=t;e.classList.add('show');setTimeout(()=>e.classList.remove('show'),2200)}
+function buildTSV(){
+  const cal=DATA.cal[state.g],con=DATA.contracts[state.y],cfg=COLS[state.y];
+  const by={};con.weeks.forEach(w=>by[w.mka]=w);
+  const clean=s=>String(s==null?'':s).replace(/[\t\r\n]+/g,' ').trim();
+  const bc=cfg.type==='b'?cfg.cols:[];
+  const lines=[['MKA','Dari','Hingga','Standard kandungan'].concat(cfg.type==='w'&&!cfg.nobt?['Bil. taksir']:[]).concat(bc.map(c=>c[1])).concat(['Rendah','Sederhana','Tinggi','Jumlah soalan']).join('\t')];
+  cal.rows.forEach(r=>{
+    if(!inView(r))return;
+    if(r.type==='cuti'){lines.push(['',r.frm,r.to,clean(r.name)].join('\t'));return;}
+    const w=by[r.mka]; if(!w){lines.push([r.mka,r.frm,r.to,''].join('\t'));return;}
+    if(w.kind!=='teach'){lines.push([r.mka,r.frm,r.to,clean(SPEC_TITLE[w.kind]||w.title)].join('\t'));return;}
+    const e=effWeek(w,cfg);
+    w.items.forEach((it,i)=>{
+      const ei=e.items[i];
+      let row=[i===0?r.mka:'',i===0?r.frm:'',i===0?r.to:'',clean((it.b?it.b+': ':'')+it.t)];
+      if(cfg.type==='w'){row=row.concat(cfg.nobt?[]:[i===0?(w.bt==null?'':w.bt):''],i===0?e.rst.concat([e.total]):['','','','']);}
+      else{row=row.concat(bc.map(([k])=>k==='set'?(ei.set==null?'':ei.set):(ei.c&&ei.c[k]?ei.c[k]:'')),ei.rst.map(v=>v||''),[ei.tot||'']);}
+      lines.push(row.join('\t'));
+    });
+  });
+  return lines.join('\n');
+}
+async function copyTable(){
+  const t=buildTSV();
+  try{ await navigator.clipboard.writeText(t); toast('Jadual disalin. Tampal dalam Excel atau Sheets.'); }
+  catch(e){ $('dlgText').value=t; try{$('dlg').showModal();$('dlgText').focus();$('dlgText').select();}catch(_){toast('Salinan gagal.');} }
+}
+/* ===================== EKSPORT PDF / WORD (susun atur ikut fail asal) ===================== */
+const CL={blue:'3C78D8',white:'FFFFFF',yel:'FFFF00',lyel:'FFF2CC',grey:'D9D9D9',lgrey:'EFEFEF',pink:'E91E63',green:'38D84A',org:'FFB74D',lorg:'FFE0B2'};
+const dmy=iso=>{const p=iso.split('-');return p[2]+'/'+p[1]+'/'+p[0].slice(2)};
+const cell=(t,o)=>Object.assign({t:t==null?'':t,cs:1,rs:1},o||{});
+const lines=t=>Array.isArray(t)?t.map(String):String(t==null?'':t).split('\n');
+
+function buildModel(){
+  const cal=DATA.cal[state.g],con=DATA.contracts[state.y],cfg=COLS[state.y],y=state.y;
+  const by={};con.weeks.forEach(w=>by[w.mka]=w);
+  const rows=cal.rows.filter(inView);
+  const guru=($('selGuru').value==='__other'?$('inGuru').value:$('selGuru').value).trim(),kelas=($('selKelas').value==='__other'?$('inKelas').value:$('selKelas').value).trim();
+  const blocks=[],rt=getRatio();
+  const notesOf=r=>(r.notes||[]).map(n=>dmy(n[0]).slice(0,5)+': '+n[1]).join('; ');
+  const H=(t,o)=>cell(t,Object.assign({b:1,bg:CL.blue,fg:CL.white,al:'c'},o||{}));
+  const V=(t,o)=>cell(t,Object.assign({b:1,bg:CL.lyel,al:'c'},o||{}));
+  const GREY=o=>Object.assign({bg:CL.grey,b:1},o||{});
+  const isEx=w=>w&&(w.kind==='upsa'||w.kind==='uasa');
+  const ARAS=[H('RENDAH',{bg:CL.lorg,fg:'000000'}),H('SEDERHANA',{bg:CL.lorg,fg:'000000'}),H('TINGGI',{bg:CL.lorg,fg:'000000'})];
+
+  if(true){
+    const nb=!(y===4||y===5);
+    let tb=0,R=0,S=0,T=0;
+    rows.forEach(r=>{if(r.type==='week'){const w=by[r.mka];if(w&&w.kind==='teach'){const e=effWeek(w,cfg);tb+=w.bt||0;R+=e.rst[0];S+=e.rst[1];T+=e.rst[2];}}});
+    const tq=R+S+T,pc=v=>tq?Math.round(v/tq*100):0;
+    const body=[];
+    rows.forEach(r=>{
+      if(r.type==='cuti'){body.push([cell(dmy(r.frm),GREY({al:'c'})),cell(dmy(r.to),GREY({al:'c'})),cell('CUTI',GREY({al:'c'})),cell(r.name.toUpperCase(),GREY({cs:nb?7:8}))]);return;}
+      const w=by[r.mka];const base=[cell(dmy(r.frm),{al:'c'}),cell(dmy(r.to),{al:'c'}),cell('MKA'+r.mka,{al:'c',b:1,fg:'1155CC'})];
+      const note=notesOf(r);
+      if(!w||w.kind!=='teach'){
+        const g=isEx(w)?{bg:CL.grey,b:1}:{};
+        body.push(base.concat([cell(w?w.title:'',Object.assign({cs:nb?5:6},g)),cell('',g),cell(note,Object.assign({fs:8},g))]));return;
+      }
+      const e=effWeek(w,cfg);
+      body.push(base.concat([cell(w.items.map(i=>i.t),{}),cell(''),...(nb?[]:[cell(w.bt==null?'':w.bt,{al:'c'})]),cell(nz(e.rst[0]),{al:'c'}),cell(nz(e.rst[1]),{al:'c'}),cell(nz(e.rst[2]),{al:'c'}),cell('',{}),cell(note,{fs:8})]));
+    });
+    const hdr=[
+      [H('KONTRAK LATIHAN',{cs:3,rs:2}),H('NAMA GURU'),H('MP'),H('KELAS'),H('KERAPAN'),H('BIL WAKTU'),...(nb?[]:[H('JUM TAKSIR')]),H('JUM SOALAN'),H('R : S : T')],
+      [V(guru),V('P.ISLAM'),V(kelas),V(con.kerapan),V(con.bilwaktu),...(nb?[]:[V(tb)]),V(tq),V(pc(R)+' : '+pc(S)+' : '+pc(T))],
+      [H('DARI',{rs:2}),H('HINGGA',{rs:2}),H('MKA',{rs:2}),H('STANDARD KANDUNGAN',{rs:2}),H('STATUS',{rs:2}),...(nb?[]:[H('BIL TAKSIR',{rs:2})]),H('ARAS SOALAN (FORMULA '+rt.join(':')+')',{cs:3,bg:CL.org,fg:'000000'}),H('MEMENUHI',{rs:2,bg:CL.org,fg:'000000'}),H('CATATAN',{rs:2,bg:CL.yel,fg:'000000'})],
+      ARAS
+    ];
+    blocks.push({k:'table',w:nb?[7,7,6,35,7,7,8,7,9,10]:[7,7,6,31,7,6,6,7,6,8,9],hdr:4,rep:2,fs:9,rows:hdr.concat(body)});
+    if(y===2)blocks.push({k:'p',t:'*Jumlah soalan 20 seminggu. Jumlah set dan soalan berdasarkan Buku Aktiviti Pendidikan Islam',fs:9,i:1});
+  }
+  else if(y===3){
+    const body=[];
+    rows.forEach(r=>{
+      if(r.type==='cuti'){body.push([cell(r.name.toUpperCase()+'  ('+dmy(r.frm)+' – '+dmy(r.to)+')',GREY({cs:15,al:'c'}))]);return;}
+      const w=by[r.mka];const note=notesOf(r);const n=(w&&w.kind==='teach')?w.items.length:1;
+      const lead=[cell(dmy(r.frm),{al:'c',rs:n}),cell(dmy(r.to),{al:'c',rs:n}),cell('M'+r.mka,{al:'c',b:1,rs:n})];
+      if(!w||w.kind!=='teach'){
+        const g=isEx(w)?{bg:CL.grey,b:1}:{};
+        body.push(lead.concat([cell(w?w.title:'',Object.assign({cs:10},g)),cell('',g),cell(note,Object.assign({fs:8},g))]));return;
+      }
+      const e=effWeek(w,cfg);
+      w.items.forEach((it,i)=>{
+        const ei=e.items[i],c=ei.c||{};
+        const r_=[cell(it.t),cell(''),cell(nz(c.quran),{al:'c'}),cell(nz(c.hadis),{al:'c'}),cell(nz(c.ulum),{al:'c'}),cell(nz(c.adab),{al:'c'}),cell(nz(c.jawi),{al:'c'}),cell(nz(ei.rst[0]),{al:'c'}),cell(nz(ei.rst[1]),{al:'c'}),cell(nz(ei.rst[2]),{al:'c'}),cell('')];
+        if(i===0){r_.push(cell(note,{rs:n,fs:8}));body.push(lead.concat(r_));}else body.push(r_);
+      });
+    });
+    const hdr=[
+      [H('KONTRAK LATIHAN',{cs:3,rs:2}),H('NAMA GURU',{cs:2}),H('MP'),H('KELAS',{cs:2}),H('KERAPAN'),H('BIL WAKTU'),H('',{cs:5})],
+      [V(guru,{cs:2}),V('P.ISLAM'),V(kelas,{cs:2}),V(con.kerapan),V(con.bilwaktu),V('',{cs:5})],
+      [H('DARI',{rs:2}),H('HINGGA',{rs:2}),H('MKA',{rs:2}),H('STANDARD KANDUNGAN',{rs:2}),H('STATUS',{rs:2}),H('JUMLAH SOALAN',{cs:5}),H('ARAS SOALAN (FORMULA '+rt.join(':')+')',{cs:3,bg:CL.org,fg:'000000'}),H('MEMENUHI',{rs:2,bg:CL.org,fg:'000000'}),H('CATATAN',{rs:2,bg:CL.yel,fg:'000000'})],
+      ['AL-QURAN','HADIS','ULUM','ADAB','JAWI'].map(x=>H(x,{bg:CL.lgrey,fg:'000000'})).concat(ARAS)
+    ];
+    blocks.push({k:'table',w:[6,6,4,22,5,5,4,4,4,4,4.5,4.5,4.5,8,14.5],hdr:4,rep:2,fs:8,rows:hdr.concat(body)});
+  }
+  else{
+    blocks.push({k:'p',t:'KONTRAK LATIHAN PENDIDIKAN ISLAM TAHUN '+y+'_2027',fs:11});
+    if(guru||kelas)blocks.push({k:'p',t:[guru&&('Nama guru: '+guru),kelas&&('Kelas: '+kelas)].filter(Boolean).join('    '),fs:10});
+    con.sk.forEach((sec,i)=>{
+      blocks.push({k:'p',t:String.fromCharCode(65+i)+'. BIDANG '+sec.head,fs:11,b:1,gap:1});
+      const hd=['SK','Standard Kandungan','Rendah','Sederhana','Tinggi','Jumlah'].map((x,j)=>cell(x,{b:1,al:j>1?'c':'l'}));
+      let R=0,S=0,T=0;
+      const body=sec.rows.map(x=>{
+        const none=x.r==null&&x.s==null&&x.tt==null,tot=(x.r||0)+(x.s||0)+(x.tt||0),sp=none?[0,0,0]:split3(tot,rt);
+        R+=sp[0];S+=sp[1];T+=sp[2];
+        return [cell(x.sk),cell(x.t),cell(none?'':sp[0],{al:'c'}),cell(none?'':sp[1],{al:'c'}),cell(none?'':sp[2],{al:'c'}),cell(none?'':tot,{al:'c'})];});
+      body.push([cell('Jumlah '+sec.head.charAt(0)+sec.head.slice(1).toLowerCase(),{b:1,cs:2}),cell(R,{b:1,al:'c'}),cell(S,{b:1,al:'c'}),cell(T,{b:1,al:'c'}),cell(R+S+T,{b:1,al:'c'})]);
+      blocks.push({k:'table',w:[9,51,10,12,9,9],hdr:1,rep:1,fs:10,rows:[hd].concat(body)});
+    });
+    blocks.push({k:'pb'});
+    blocks.push({k:'p',t:'JADUAL AGIHAN MINGGUAN 2027 (CADANGAN) – '+DATA.cal[state.g].label,fs:11,b:1});
+    const body=[];
+    rows.forEach(r=>{
+      if(r.type==='cuti'){body.push([cell(dmy(r.frm),GREY({al:'c'})),cell(dmy(r.to),GREY({al:'c'})),cell('CUTI',GREY({al:'c'})),cell(r.name.toUpperCase(),GREY({cs:5}))]);return;}
+      const w=by[r.mka];const base=[cell(dmy(r.frm),{al:'c'}),cell(dmy(r.to),{al:'c'}),cell('MKA'+r.mka,{al:'c',b:1})];
+      if(!w||w.kind!=='teach'){body.push(base.concat([cell(w?w.title:'',{cs:5,b:1,bg:isEx(w)?CL.grey:CL.lgrey})]));return;}
+      const e=effWeek(w,cfg),n=w.items.length;
+      w.items.forEach((it,i)=>{
+        const ei=e.items[i];
+        const rr=[cell((it.b?it.b+': ':'')+it.t),cell(nz(ei.rst[0]),{al:'c'}),cell(nz(ei.rst[1]),{al:'c'}),cell(nz(ei.rst[2]),{al:'c'}),cell(nz(ei.tot),{al:'c'})];
+        body.push(i===0?base.map(c=>Object.assign({},c,{rs:n})).concat(rr):rr);
+      });
+    });
+    const hdr=[[H('DARI'),H('HINGGA'),H('MKA'),H('STANDARD KANDUNGAN'),H('RENDAH'),H('SEDERHANA'),H('TINGGI'),H('JUMLAH')]];
+    blocks.push({k:'table',w:[8,8,7,43,8,10,8,8],hdr:1,rep:1,fs:9,rows:hdr.concat(body)});
+  }
+  const landscape=true;
+  return {land:landscape,blocks,file:'Kontrak-Latihan-Tahun-'+y+'-'+DATA.cal[state.g].label.replace(' ','-')+'-2027'};
+}
+
+/* ---------- jaringan sel (rowspan) ---------- */
+function placeRows(tb){ // returns for each row: [{c, col}], plus continuation info
+  const nc=tb.w.length,busy=new Array(nc).fill(0),bcs=new Array(nc).fill(1),out=[];
+  tb.rows.forEach(row=>{
+    const startFree=!busy.some(b=>b>0);
+    let col=0;const placed=[],cont=[];
+    for(let c=0;c<nc;){
+      if(busy[c]>0){cont.push({col:c,cs:bcs[c]});c+=bcs[c];continue;}
+      const cl=row[col++];if(!cl)break;
+      placed.push({cl,col:c});
+      if(cl.rs>1){for(let k=0;k<cl.cs;k++){busy[c+k]=cl.rs;bcs[c+k]=cl.cs;}}
+      c+=cl.cs;
+    }
+    for(let c=0;c<nc;c++)if(busy[c]>0)busy[c]--;
+    // cells newly set had rs; they decrement to rs-1 which is correct
+    out.push({placed,cont,startFree});
+  });
+  return out;
+}
+
+/* ---------- HTML -> PDF ---------- */
+const PW=1123,PH=794,MG=28,SC=2;
+function cellHtml(cl,fs){
+  const f=cl.fs||fs,lh=Math.round(f*1.35);
+  const ls=lines(cl.t).map(l=>hasArabic(l)?`<div dir="rtl" style="text-align:right;font-size:${f+2}px;line-height:${Math.round(f*1.9)}px">${esc(l)}</div>`:`<div style="line-height:${lh}px;min-height:${lh}px">${esc(l)}</div>`).join('');
+  const st=`border:1px solid #000;padding:2px 4px;vertical-align:${cl.al==='c'?'middle':'top'};text-align:${cl.al==='c'?'center':'left'};font-size:${f}px;`+(cl.b?'font-weight:bold;':'')+(cl.i?'font-style:italic;':'')+(cl.bg?`background:#${cl.bg};`:'')+(cl.fg?`color:#${cl.fg};`:'');
+  return `<td colspan="${cl.cs}" rowspan="${cl.rs}" style="${st}">${ls}</td>`;
+}
+function trHtml(tb,pr,i){return `<tr data-i="${i}">`+pr[i].placed.map(p=>cellHtml(p.cl,tb.fs)).join('')+'</tr>';}
+function tableHtml(tb,pr,idx,wpx){
+  const cg=tb.w.map(w=>`<col style="width:${(w/100*wpx).toFixed(1)}px"/>`).join('');
+  return `<table style="border-collapse:collapse;table-layout:fixed;width:${wpx}px"><colgroup>${cg}</colgroup>`+idx.map(i=>trHtml(tb,pr,i)).join('')+'</table>';
+}
+function pHtml(b,wpx){
+  const t=hasArabic(b.t)?'':esc(b.t);
+  return `<div style="font-size:${b.fs}px;line-height:${Math.round(b.fs*1.5)}px;${b.b?'font-weight:bold;':''}${b.i?'font-style:italic;':''}${b.gap?'margin-top:14px;':''}margin-bottom:4px">${t}</div>`;
+}
+const BASE='font-family:Arial,\'Noto Naskh Arabic\',\'Times New Roman\',sans-serif;color:#000;';
+function paginate(model){
+  const W=model.land?PW:PH,Hh=model.land?PH:PW,cw=W-2*MG,ch=Hh-2*MG-4;
+  // ukur dalam DOM
+  const host=document.createElement('div');host.style.cssText=`position:absolute;left:-99999px;top:0;width:${cw}px;${BASE}`;document.body.appendChild(host);
+  const items=[];
+  model.blocks.forEach(b=>{
+    if(b.k==='pb'){items.push({pb:1});return;}
+    if(b.k==='p'){host.innerHTML=pHtml(b,cw);items.push({p:b,h:host.firstChild.getBoundingClientRect().height+(b.gap?14:0)+4});return;}
+    const pr=placeRows(b);
+    host.innerHTML=tableHtml(b,pr,b.rows.map((_,i)=>i),cw);
+    const trs=[...host.querySelectorAll('tr')],tt=host.firstChild.getBoundingClientRect().top;
+    const top=i=>trs[i].getBoundingClientRect().top-tt;
+    const bot=i=>trs[i].getBoundingClientRect().bottom-tt;
+    const total=host.firstChild.getBoundingClientRect().height;
+    const hdrH=bot(b.hdr-1),repH=bot(b.hdr-1)-top(b.hdr-b.rep);
+    // kumpulan baris
+    const groups=[];let cur=null;
+    for(let i=b.hdr;i<b.rows.length;i++){if(pr[i].startFree||!cur){cur={a:i,z:i};groups.push(cur);}else cur.z=i;}
+    groups.forEach(g=>{g.h=(g.z+1<trs.length?top(g.z+1):total)-top(g.a);});
+    items.push({t:b,pr,groups,hdrH,repH});
+  });
+  host.remove();
+  // susun halaman
+  const pages=[];let page={html:'',used:0};
+  const newPage=()=>{pages.push(page);page={html:'',used:0};};
+  items.forEach(it=>{
+    if(it.pb){if(page.used>0)newPage();return;}
+    if(it.p){if(page.used+it.h>ch)newPage();page.html+=pHtml(it.p,cw);page.used+=it.h;return;}
+    const b=it.t;let first=true,seg=[],segH=0;
+    const flush=()=>{
+      if(!seg.length)return;
+      const idx=[];const head=first?[...Array(b.hdr).keys()]:[...Array(b.rep).keys()].map(k=>b.hdr-b.rep+k);
+      head.forEach(i=>idx.push(i));seg.forEach(g=>{for(let i=g.a;i<=g.z;i++)idx.push(i);});
+      page.html+=tableHtml(b,it.pr,idx,cw);page.used+=segH;seg=[];segH=0;
+    };
+    // pastikan baris pengepala dengan rowspan (rep) mengekalkan struktur: guna indeks sebenar
+    let headH=it.hdrH;
+    if(page.used+headH+ (it.groups[0]?it.groups[0].h:0)>ch)newPage();
+    segH=headH;
+    it.groups.forEach(g=>{
+      if(page.used+segH+g.h>ch){flush();newPage();first=false;segH=it.repH;}
+      seg.push(g);segH+=g.h;
+    });
+    flush();first=false;
+  });
+  if(page.used>0||!pages.length)pages.push(page);
+  return {pages,W,Hh};
+}
+async function pageToJpeg(html,W,Hh){
+  const x=`<div xmlns="http://www.w3.org/1999/xhtml" style="width:${W}px;height:${Hh}px;background:#fff;padding:${MG}px;box-sizing:border-box;${BASE}">${html}</div>`;
+  const svg=`<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${Hh}"><foreignObject x="0" y="0" width="${W}" height="${Hh}">${x}</foreignObject></svg>`;
+  const img=new Image();img.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg);
+  await img.decode();
+  const cv=document.createElement('canvas');cv.width=W*SC;cv.height=Hh*SC;
+  const g=cv.getContext('2d');g.fillStyle='#fff';g.fillRect(0,0,cv.width,cv.height);g.drawImage(img,0,0,cv.width,cv.height);
+  const blob=await new Promise((res,rej)=>cv.toBlob(b=>b?res(b):rej(new Error('canvas')),'image/jpeg',0.92));
+  return {bytes:new Uint8Array(await blob.arrayBuffer()),w:cv.width,h:cv.height};
+}
+const enc=new TextEncoder();
+function concat(arr){let n=0;arr.forEach(a=>n+=a.length);const o=new Uint8Array(n);let p=0;arr.forEach(a=>{o.set(a,p);p+=a.length});return o;}
+async function buildPdf(){
+  const model=buildModel(),pg=paginate(model);
+  const wpt=model.land?842:595,hpt=model.land?595:842;
+  const jpgs=[];for(const p of pg.pages)jpgs.push(await pageToJpeg(p.html,pg.W,pg.Hh));
+  const n=jpgs.length,parts=[],offs=[];let len=0;
+  const push=b=>{if(typeof b==='string')b=enc.encode(b);parts.push(b);len+=b.length;};
+  const obj=(i,body)=>{offs[i]=len;push(i+' 0 obj\n');push(body);push('\nendobj\n');};
+  push('%PDF-1.4\n%\xE2\xE3\xCF\xD3\n');
+  obj(1,'<< /Type /Catalog /Pages 2 0 R >>');
+  obj(2,'<< /Type /Pages /Kids ['+jpgs.map((_,i)=>(3+i*3)+' 0 R').join(' ')+'] /Count '+n+' >>');
+  jpgs.forEach((j,i)=>{
+    const po=3+i*3,co=po+1,io=po+2;
+    obj(po,`<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ${wpt} ${hpt}] /Resources << /XObject << /Im0 ${io} 0 R >> >> /Contents ${co} 0 R >>`);
+    const cs=`q ${wpt} 0 0 ${hpt} 0 0 cm /Im0 Do Q`;
+    obj(co,`<< /Length ${cs.length} >>\nstream\n${cs}\nendstream`);
+    offs[io]=len;push(`${io} 0 obj\n<< /Type /XObject /Subtype /Image /Width ${j.w} /Height ${j.h} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${j.bytes.length} >>\nstream\n`);push(j.bytes);push('\nendstream\nendobj\n');
+  });
+  const total=2+n*3,xr=len;
+  push(`xref\n0 ${total+1}\n0000000000 65535 f \n`);
+  for(let i=1;i<=total;i++)push(String(offs[i]).padStart(10,'0')+' 00000 n \n');
+  push(`trailer\n<< /Size ${total+1} /Root 1 0 R >>\nstartxref\n${xr}\n%%EOF`);
+  return {bytes:concat(parts),name:model.file+'.pdf',mime:'application/pdf'};
+}
+
+/* ---------- DOCX ---------- */
+const X=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+function crcTable(){const t=[];for(let n=0;n<256;n++){let c=n;for(let k=0;k<8;k++)c=c&1?0xEDB88320^(c>>>1):c>>>1;t[n]=c>>>0;}return t;}
+const CRCT=crcTable();
+function crc32(b){let c=0xFFFFFFFF;for(let i=0;i<b.length;i++)c=CRCT[(c^b[i])&255]^(c>>>8);return (c^0xFFFFFFFF)>>>0;}
+function zip(files){
+  const parts=[],cd=[];let off=0;
+  const u16=v=>new Uint8Array([v&255,(v>>8)&255]),u32=v=>new Uint8Array([v&255,(v>>8)&255,(v>>16)&255,(v>>24)&255]);
+  files.forEach(f=>{
+    const nm=enc.encode(f.name),d=f.data,c=crc32(d);
+    const lh=concat([u32(0x04034b50),u16(20),u16(0x0800),u16(0),u16(0),u16(0x21),u32(c),u32(d.length),u32(d.length),u16(nm.length),u16(0),nm]);
+    parts.push(lh,d);
+    cd.push(concat([u32(0x02014b50),u16(20),u16(20),u16(0x0800),u16(0),u16(0),u16(0x21),u32(c),u32(d.length),u32(d.length),u16(nm.length),u16(0),u16(0),u16(0),u16(0),u32(0),u32(off),nm]));
+    off+=lh.length+d.length;
+  });
+  const cdb=concat(cd);
+  return concat(parts.concat([cdb,concat([u32(0x06054b50),u16(0),u16(0),u16(files.length),u16(files.length),u32(cdb.length),u32(off),u16(0)])]));
+}
+function runX(text,o){
+  const rtl=hasArabic(text);
+  const sz=Math.round((o.fs+(rtl?1:0))*2);
+  return `<w:r><w:rPr><w:rFonts w:ascii="Arial" w:hAnsi="Arial" w:cs="Arial"/>${o.b?'<w:b/><w:bCs/>':''}${o.i?'<w:i/>':''}${o.fg?`<w:color w:val="${o.fg}"/>`:''}<w:sz w:val="${sz}"/><w:szCs w:val="${sz}"/>${rtl?'<w:rtl/>':''}</w:rPr><w:t xml:space="preserve">${X(text)}</w:t></w:r>`;
+}
+function paraX(text,o){
+  const rtl=hasArabic(text);
+  const jc=rtl?'left':(o.al==='c'?'center':'left');
+  return `<w:p><w:pPr>${rtl?'<w:bidi/>':''}<w:spacing w:before="${o.before||20}" w:after="${o.after||20}"/><w:jc w:val="${jc}"/></w:pPr>${text===''?'':runX(text,o)}</w:p>`;
+}
+function tableX(tb,twW){
+  const nc=tb.w.length,gw=tb.w.map(w=>Math.round(w/100*twW)),pr=placeRows(tb);
+  let x=`<w:tbl><w:tblPr><w:tblW w:w="${twW}" w:type="dxa"/><w:tblLayout w:type="fixed"/><w:tblBorders>`+['top','left','bottom','right','insideH','insideV'].map(k=>`<w:${k} w:val="single" w:sz="4" w:space="0" w:color="000000"/>`).join('')+`</w:tblBorders><w:tblCellMar><w:left w:w="70" w:type="dxa"/><w:right w:w="70" w:type="dxa"/></w:tblCellMar></w:tblPr><w:tblGrid>`+gw.map(g=>`<w:gridCol w:w="${g}"/>`).join('')+'</w:tblGrid>';
+  tb.rows.forEach((row,i)=>{
+    const p=pr[i],items=[];
+    p.placed.forEach(o=>items.push({col:o.col,cl:o.cl}));p.cont.forEach(o=>items.push({col:o.col,cont:o.cs}));
+    items.sort((a,b)=>a.col-b.col);
+    x+=`<w:tr><w:trPr><w:cantSplit/>${i<tb.hdr?'<w:tblHeader/>':''}</w:trPr>`;
+    items.forEach(it=>{
+      if(it.cont){const w=gw.slice(it.col,it.col+it.cont).reduce((a,b)=>a+b,0);x+=`<w:tc><w:tcPr><w:tcW w:w="${w}" w:type="dxa"/>${it.cont>1?`<w:gridSpan w:val="${it.cont}"/>`:''}<w:vMerge/></w:tcPr><w:p/></w:tc>`;return;}
+      const cl=it.cl,w=gw.slice(it.col,it.col+cl.cs).reduce((a,b)=>a+b,0);
+      x+=`<w:tc><w:tcPr><w:tcW w:w="${w}" w:type="dxa"/>${cl.cs>1?`<w:gridSpan w:val="${cl.cs}"/>`:''}${cl.rs>1?'<w:vMerge w:val="restart"/>':''}${cl.bg?`<w:shd w:val="clear" w:color="auto" w:fill="${cl.bg}"/>`:''}<w:vAlign w:val="${cl.al==='c'?'center':'top'}"/></w:tcPr>`;
+      const o={fs:cl.fs||tb.fs,b:cl.b,i:cl.i,fg:cl.fg,al:cl.al};
+      x+=lines(cl.t).map(l=>paraX(l,o)).join('');
+      x+='</w:tc>';
+    });
+    x+='</w:tr>';
+  });
+  return x+'</w:tbl>';
+}
+function buildDocx(){
+  const m=buildModel();
+  const pw=m.land?16838:11906,ph=m.land?11906:16838,mg=m.land?600:850,tw=pw-2*mg;
+  let body='';
+  m.blocks.forEach(b=>{
+    if(b.k==='pb')body+='<w:p><w:r><w:br w:type="page"/></w:r></w:p>';
+    else if(b.k==='p')body+=paraX(b.t,{fs:b.fs,b:b.b,i:b.i,before:b.gap?240:40,after:80});
+    else{body+=tableX(b,tw);body+='<w:p><w:pPr><w:spacing w:before="0" w:after="0"/></w:pPr></w:p>';}
+  });
+  const doc=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:body>${body}<w:sectPr><w:pgSz w:w="${pw}" w:h="${ph}"${m.land?' w:orient="landscape"':''}/><w:pgMar w:top="${mg}" w:right="${mg}" w:bottom="${mg}" w:left="${mg}" w:header="300" w:footer="300" w:gutter="0"/></w:sectPr></w:body></w:document>`;
+  const ct='<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/></Types>';
+  const rels='<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/></Relationships>';
+  const bytes=zip([{name:'[Content_Types].xml',data:enc.encode(ct)},{name:'_rels/.rels',data:enc.encode(rels)},{name:'word/document.xml',data:enc.encode(doc)}]);
+  return {bytes,name:m.file+'.docx',mime:'application/vnd.openxmlformats-officedocument.wordprocessingml.document'};
+}
+
+/* ---------- muat turun (keupayaan downloads) ---------- */
+let DL=null;
+async function saveFile(f){
+  const tries=[()=>new Blob([f.bytes],{type:f.mime}),()=>f.bytes,()=>f.bytes.buffer];
+  let last;
+  for(const mk of tries){
+    try{await DL.save({filename:f.name,data:mk()});return true;}
+    catch(e){last=e;if(/declin|cancel|reject|denied/i.test((e&&(e.code||e.message))||''))return false;}
+  }
+  throw last;
+}
+async function doExport(kind){
+  const btn=$(kind==='pdf'?'btnPdf':'btnDocx');const old=btn.textContent;btn.disabled=true;btn.textContent='Menjana…';
+  try{
+    const f=kind==='pdf'?await buildPdf():buildDocx();
+    const ok=await saveFile(f);
+    toast(ok?'Fail disediakan: '+f.name:'Muat turun dibatalkan.');
+  }catch(e){toast('Gagal menjana fail ('+(e&&e.message||e)+').');}
+  btn.disabled=false;btn.textContent=old;
+}
+(async()=>{
+  try{DL=window.claude&&await window.claude.use('downloads');}catch(e){DL=null;}
+  if(DL){$('btnPdf').hidden=false;$('btnDocx').hidden=false;}
+  $('btnPdf').addEventListener('click',()=>doExport('pdf'));
+  $('btnDocx').addEventListener('click',()=>doExport('docx'));
+})();
+
+const THEMES=[['auto','Tema: Auto'],['dark','Tema: Gelap'],['light','Tema: Terang']];
+function applyTheme(m){
+  const r=document.documentElement;
+  if(m==='auto')r.removeAttribute('data-theme');else r.setAttribute('data-theme',m);
+  const lab=THEMES.find(x=>x[0]===m)||THEMES[0];$('btnTheme').textContent=lab[1];
+}
+(function(){
+  let m=store.get('klm27:theme')||'auto';
+  applyTheme(m);
+  $('btnTheme').addEventListener('click',()=>{
+    const i=THEMES.findIndex(x=>x[0]===m);m=THEMES[(i+1)%3][0];store.set('klm27:theme',m);applyTheme(m);
+  });
+})();
+
+init();
+</script>
+</body>
+</html>
