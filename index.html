@@ -744,6 +744,7 @@ function buildDocx(){
 /* ---------- muat turun (keupayaan downloads) ---------- */
 let DL=null;
 async function saveFile(f){
+  if(!DL){const u=URL.createObjectURL(new Blob([f.bytes],{type:f.mime}));const a=document.createElement('a');a.href=u;a.download=f.name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),4000);return true;}
   const tries=[()=>new Blob([f.bytes],{type:f.mime}),()=>f.bytes,()=>f.bytes.buffer];
   let last;
   for(const mk of tries){
@@ -763,7 +764,7 @@ async function doExport(kind){
 }
 (async()=>{
   try{DL=window.claude&&await window.claude.use('downloads');}catch(e){DL=null;}
-  if(DL){$('btnPdf').hidden=false;$('btnDocx').hidden=false;}
+  $('btnPdf').hidden=false;$('btnDocx').hidden=false;
   $('btnPdf').addEventListener('click',()=>doExport('pdf'));
   $('btnDocx').addEventListener('click',()=>doExport('docx'));
 })();
