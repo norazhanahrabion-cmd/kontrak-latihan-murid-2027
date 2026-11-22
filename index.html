@@ -134,6 +134,10 @@ dialog textarea{width:100%;height:220px;font:12px/1.4 ui-monospace,Menlo,monospa
   <div class="wrap">
     <div class="ctl-row">
       <div class="field">
+        <label for="selNegeri">Negeri</label>
+        <select id="selNegeri"></select>
+      </div>
+      <div class="field">
         <label for="selGroup">Kumpulan sekolah</label>
         <select id="selGroup"></select>
       </div>
@@ -219,17 +223,21 @@ const fd=iso=>{const [y,m,d]=iso.split('-').map(Number);return d+' '+MON[m-1]};
 const hasArabic=s=>/[؀-ۿ]/.test(s);
 const GURU=['ZARILA BINTI ZAINAL ABIDIN','NOR AZHANAH BINTI RABION','M ADIB M KIAR JOHARI','MOHD ZULKIFLI BIN ISMAIL','NIK RABIATUL ADAWIYAH','NUR AZIMA BINTI ABDULLAH','AZLINA FAZIERA BINTI AHMAD','SITI NABILAH BINTI AB WAHAB','ZUBAIDAH HARUN'];
 const KELAS={1:['AMANAH','ARIF','ASPIRASI'],2:['AMANAH','ARIF','ASPIRASI'],3:['AMANAH','ARIF','ASPIRASI'],4:['AKTIF','AMANAH','ARIF','ASPIRASI'],5:['AMANAH','ARIF','ASPIRASI'],6:['AKTIF','AMANAH','ARIF','ASPIRASI']};
-const state={g:'A',y:3,v:'all'};
+const NEGERI={A:['Kedah','Kelantan','Terengganu'],B:['Johor','Melaka','Negeri Sembilan','Pahang','Perak','Perlis','Pulau Pinang','Sabah','Sarawak','Selangor','WP Kuala Lumpur','WP Labuan','WP Putrajaya']};
+const nslug=n=>n.toLowerCase().replace(/\s+/g,'-');
+const state={g:'A',y:3,v:'all',n:''};
 const store={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
 
 function init(){
   $('selGroup').innerHTML=Object.keys(DATA.cal).map(k=>`<option value="${k}">${DATA.cal[k].label}</option>`).join('');
+  $('selNegeri').innerHTML='<option value="">Pilih negeri</option>'+['A','B'].map(k=>`<optgroup label="${DATA.cal[k].label}">`+NEGERI[k].map(n=>`<option value="${n}">${n}</option>`).join('')+'</optgroup>').join('');
+  $('selNegeri').addEventListener('change',e=>{const n=e.target.value;state.n=n;if(n){state.g=NEGERI.A.indexOf(n)>=0?'A':'B';store.set('klm27:negeri',n);}else store.set('klm27:negeri','');state.v='all';sync();});
   $('selGuru').innerHTML='<option value="">Pilih guru</option>'+GURU.map(n=>`<option value="${n}">${n}</option>`).join('')+'<option value="__other">Lain-lain (taip sendiri)</option>';
   $('selYear').innerHTML=[1,2,3,4,5,6].map(y=>`<option value="${y}">Tahun ${y}</option>`).join('');
   const views=[['all','Semua minggu'],['p1','Penggal 1 (Jan – Mei)'],['p2','Penggal 2 (Jun – Dis)']].concat(MONF.map((m,i)=>['m'+i,m]));
   $('selView').innerHTML=views.map(v=>`<option value="${v[0]}">${v[1]}</option>`).join('');
   readHash();
-  $('selGroup').addEventListener('change',e=>{state.g=e.target.value;state.v='all';sync();});
+  $('selGroup').addEventListener('change',e=>{state.g=e.target.value;if(state.n&&NEGERI[state.g].indexOf(state.n)<0){state.n='';store.set('klm27:negeri','');}state.v='all';sync();});
   $('selYear').addEventListener('change',e=>{state.y=+e.target.value;sync();});
   $('selView').addEventListener('change',e=>{state.v=e.target.value;render();});
   $('selGuru').addEventListener('change',e=>{if(e.target.value==='__other'){$('inGuru').hidden=false;$('inGuru').focus();store.set('klm27:guru:'+state.y,$('inGuru').value);}else{$('inGuru').hidden=true;store.set('klm27:guru:'+state.y,e.target.value);}});
@@ -243,15 +251,19 @@ function init(){
   syncControls();render();
 }
 function readHash(){
-  const m=/^#kumpulan-([ab])-tahun-([1-6])$/.exec(location.hash||'');
-  if(m){state.g=m[1].toUpperCase();state.y=+m[2];}
+  const h=location.hash||'';
+  let m=/^#kumpulan-([ab])-tahun-([1-6])$/.exec(h);
+  if(m){state.g=m[1].toUpperCase();state.y=+m[2];if(state.n&&NEGERI[state.g].indexOf(state.n)<0)state.n='';return;}
+  m=/^#(.+)-tahun-([1-6])$/.exec(h);
+  if(m){const all=NEGERI.A.concat(NEGERI.B),n=all.find(x=>nslug(x)===m[1]);if(n){state.n=n;state.g=NEGERI.A.indexOf(n)>=0?'A':'B';state.y=+m[2];return;}}
+  const sn=store.get('klm27:negeri');if(sn&&!h){state.n=sn;state.g=NEGERI.A.indexOf(sn)>=0?'A':'B';}
 }
 function sync(){
-  try{history.replaceState(null,'','#kumpulan-'+state.g.toLowerCase()+'-tahun-'+state.y);}catch(e){}
+  try{history.replaceState(null,'','#'+(state.n?nslug(state.n):'kumpulan-'+state.g.toLowerCase())+'-tahun-'+state.y);}catch(e){}
   syncControls();render();
 }
 function syncControls(){
-  $('selGroup').value=state.g;$('selYear').value=state.y;$('selView').value=state.v;
+  $('selNegeri').value=state.n;$('selGroup').value=state.g;$('selYear').value=state.y;$('selView').value=state.v;
   const c=DATA.contracts[state.y];
   const sg=store.get('klm27:guru:'+state.y), sk=store.get('klm27:kelas:'+state.y);
   const gv=sg!=null?sg:(c.guru||'');
@@ -262,7 +274,7 @@ function syncControls(){
   let kv=sk!=null?sk:(c.kelas?(/^\d/.test(c.kelas)?c.kelas:state.y+' '+c.kelas):'');
   if(kl.indexOf(kv)>=0||kv===''){$('selKelas').value=kv;$('inKelas').hidden=true;$('inKelas').value='';}
   else{$('selKelas').value='__other';$('inKelas').hidden=false;$('inKelas').value=kv;}
-  $('groupHint').textContent=DATA.cal[state.g].label+': '+DATA.cal[state.g].negeri+'. Hari persekolahan '+DATA.cal[state.g].weekdays+'.';
+  $('groupHint').textContent=(state.n?state.n+' tergolong dalam ':'')+DATA.cal[state.g].label+(state.n?'':': '+DATA.cal[state.g].negeri)+'. Hari persekolahan '+DATA.cal[state.g].weekdays+'.'+(state.n?' Jadual mengikut kalendar akademik kumpulan; cuti khas negeri tidak dimasukkan.':'');
 }
 /* ---------- tetapan soalan (aras R:S:T dan jumlah) ---------- */
 function getRatio(){try{const r=JSON.parse(store.get('klm27:ratio')||'null');if(Array.isArray(r)&&r.length===3&&r.every(x=>x>=0)&&r.some(x=>x>0))return r;}catch(e){}return [5,3,2];}
